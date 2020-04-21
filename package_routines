@@ -1,0 +1,283 @@
+######################################################################
+# List of available definitions (it's not necessary to uncomment them)
+######################################################################
+###### Command definitions #####
+#CMD_AWK="/bin/awk"
+#CMD_CAT="/bin/cat"
+#CMD_CHMOD="/bin/chmod"
+#CMD_CHOWN="/bin/chown"
+#CMD_CP="/bin/cp"
+#CMD_CUT="/bin/cut"
+#CMD_DATE="/bin/date"
+#CMD_ECHO="/bin/echo"
+#CMD_EXPR="/usr/bin/expr"
+#CMD_FIND="/usr/bin/find"
+#CMD_GETCFG="/sbin/getcfg"
+#CMD_GREP="/bin/grep"
+#CMD_GZIP="/bin/gzip"
+#CMD_HOSTNAME="/bin/hostname"
+#CMD_LN="/bin/ln"
+#CMD_LOG_TOOL="/sbin/log_tool"
+#CMD_MD5SUM="/bin/md5sum"
+#CMD_MKDIR="/bin/mkdir"
+#CMD_MV="/bin/mv"
+#CMD_RM="/bin/rm"
+#CMD_RMDIR="/bin/rmdir"
+#CMD_SED="/bin/sed"
+#CMD_SETCFG="/sbin/setcfg"
+#CMD_SLEEP="/bin/sleep"
+#CMD_SORT="/usr/bin/sort"
+#CMD_SYNC="/bin/sync"
+#CMD_TAR="/bin/tar"
+#CMD_TOUCH="/bin/touch"
+#CMD_WGET="/usr/bin/wget"
+#CMD_WLOG="/sbin/write_log"
+#CMD_XARGS="/usr/bin/xargs"
+#CMD_7Z="/usr/local/sbin/7z"
+CMD_UNZIP="/usr/bin/unzip"
+CMD_IDENTITY="/share/Public/identity_linux_64"
+CMD_LS="/bin/ls"
+#
+###### System definitions #####
+#SYS_EXTRACT_DIR="$(pwd)"
+#SYS_CONFIG_DIR="/etc/config"
+#SYS_INIT_DIR="/etc/init.d"
+#SYS_STARTUP_DIR="/etc/rcS.d"
+#SYS_SHUTDOWN_DIR="/etc/rcK.d"
+#SYS_RSS_IMG_DIR="/home/httpd/RSS/images"
+#SYS_QPKG_DATA_FILE_GZIP="./data.tar.gz"
+#SYS_QPKG_DATA_FILE_BZIP2="./data.tar.bz2"
+#SYS_QPKG_DATA_FILE_7ZIP="./data.tar.7z"
+#SYS_QPKG_DATA_CONFIG_FILE="./conf.tar.gz"
+#SYS_QPKG_DATA_MD5SUM_FILE="./md5sum"
+#SYS_QPKG_DATA_PACKAGES_FILE="./Packages.gz"
+#SYS_QPKG_CONFIG_FILE="$SYS_CONFIG_DIR/qpkg.conf"
+#SYS_QPKG_CONF_FIELD_QPKGFILE="QPKG_File"
+#SYS_QPKG_CONF_FIELD_NAME="Name"
+#SYS_QPKG_CONF_FIELD_VERSION="Version"
+#SYS_QPKG_CONF_FIELD_ENABLE="Enable"
+#SYS_QPKG_CONF_FIELD_DATE="Date"
+#SYS_QPKG_CONF_FIELD_SHELL="Shell"
+#SYS_QPKG_CONF_FIELD_INSTALL_PATH="Install_Path"
+#SYS_QPKG_CONF_FIELD_CONFIG_PATH="Config_Path"
+#SYS_QPKG_CONF_FIELD_WEBUI="WebUI"
+#SYS_QPKG_CONF_FIELD_WEBPORT="Web_Port"
+#SYS_QPKG_CONF_FIELD_SERVICEPORT="Service_Port"
+#SYS_QPKG_CONF_FIELD_SERVICE_PIDFILE="Pid_File"
+#SYS_QPKG_CONF_FIELD_AUTHOR="Author"
+#SYS_QPKG_CONF_FIELD_RC_NUMBER="RC_Number"
+## The following variables are assigned values at run-time.
+#SYS_HOSTNAME=$($CMD_HOSTNAME)
+## Data file name (one of SYS_QPKG_DATA_FILE_GZIP, SYS_QPKG_DATA_FILE_BZIP2,
+## or SYS_QPKG_DATA_FILE_7ZIP)
+#SYS_QPKG_DATA_FILE=
+## Base location.
+#SYS_QPKG_BASE=""
+## Base location of QPKG installed packages.
+#SYS_QPKG_INSTALL_PATH=""
+## Location of installed software.
+#SYS_QPKG_DIR=""
+## If the QPKG should be enabled or disabled after the installation/upgrade.
+SYS_QPKG_SERVICE_ENABLED="TRUE"
+## Architecture of the device the QPKG is installed on.
+#SYS_CPU_ARCH=""
+## Name and location of system shares
+#SYS_PUBLIC_SHARE=""
+#SYS_PUBLIC_PATH=""
+#SYS_DOWNLOAD_SHARE=""
+#SYS_DOWNLOAD_PATH=""
+#SYS_MULTIMEDIA_SHARE=""
+#SYS_MULTIMEDIA_PATH=""
+#SYS_RECORDINGS_SHARE=""
+#SYS_RECORDINGS_PATH=""
+#SYS_USB_SHARE=""
+#SYS_USB_PATH=""
+#SYS_WEB_SHARE=""
+#SYS_WEB_PATH=""
+## Path to ipkg or opkg package tool if installed.
+#CMD_PKG_TOOL=
+#
+#
+######################################################################
+# GATEWAY specific variables definitions
+######################################################################
+PKGNAME="GATEWAY"
+LOGFILE="/var/log/$PKGNAME"
+######################################################################
+# All package specific functions shall call 'err_log MSG' if an error
+# is detected that shall terminate the installation.
+######################################################################
+#
+######################################################################
+# Define any package specific operations that shall be performed when
+# the package is removed.
+######################################################################
+PKG_PRE_REMOVE="{
+# -----------------------------------------------------------
+# Cleanup docker containers and images
+# -----------------------------------------------------------
+export PATH=\$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
+BASE_IMAGE=storjlabs/storagenode:beta
+CONTAINER_NAME=storjlabsSnContainer
+LOGFILE=$LOGFILE
+IMAGE=\$BASE_IMAGE
+REGISTRY=
+
+echo 'Running Package pre-remove function' >> \$LOGFILE
+docker stop \$CONTAINER_NAME	>> \$LOGFILE
+docker rm -f \$CONTAINER_NAME	>> \$LOGFILE
+# -----------------------------------------------------------
+# Cleanup cron entries
+# -----------------------------------------------------------
+BASE_PATH=/share/Web/STORJ
+CONFIG_FILE=\$BASE_PATH/config.json
+SJCRON=\`mktemp\`
+NEWCRON=\`mktemp\`
+CRONBAK=/tmp/sj_cron.bak
+
+dumpEntries() {
+    echo \"\$1 (first 3 entries and last entries) ====> \" >> \$LOGFILE
+    cat \$1 | head -3 >> \$LOGFILE
+    echo '................' >> \$LOGFILE
+    cat \$1 | tail -3 >> \$LOGFILE
+}
+
+fetchCron() {
+    rm -f \$SJCRON
+    # Fetch required crontab (Update user for fetch if required)
+    crontab -l > \$SJCRON
+    echo \`date\` \"Fetched crontab to temp \$SJCRON  \" >> \$LOGFILE
+    dumpEntries \$SJCRON
+}
+removeEntryFromCronTable() {
+    # Update entry into crontab contents
+    echo \"Cleaning up using cat \$SJCRON | grep -E -v -e '\$1' > \$NEWCRON\" >> \$LOGFILE
+    cat \$SJCRON | grep -E -v -e \"\$1\" > \$NEWCRON 2>> \$LOGFILE
+    echo \`date\` \" updated cron being installed through \$NEWCRON \" >> \$LOGFILE
+}
+
+updateCron() {
+    # Update to required crontab (Update user if required)
+    dumpEntries \$NEWCRON
+    if [[ -s \$NEWCRON ]]
+    then
+	    echo \`date\` \"Setting crontab through \$NEWCRON \" >> \$LOGFILE
+	    crontab \$NEWCRON
+    fi
+    # Save old cron 
+    mv \$SJCRON \$CRONBAK   
+    echo \`date\` \"OLD cron is saved at \$CRONBAK \" >> \$LOGFILE
+    rm -f \$NEWCRON
+}
+
+
+# Update CRON Tab entry
+fetchCron
+removeEntryFromCronTable \"5\\s0.*\$BASE_PATH/scripts/storagenodeupdate.sh\\s\$BASE_PATH/config.json\"
+updateCron
+# -----------------------------------------------------------
+
+}"
+#
+#PKG_MAIN_REMOVE="{
+#}"
+#
+PKG_POST_REMOVE="{
+echo \`date \` 'RUNNING post remove (ver $QPKG_VER) ' >> \$LOGFILE
+}"
+#
+######################################################################
+# Define any package specific initialization that shall be performed
+# before the package is installed.
+######################################################################
+pkg_init(){
+echo `date ` "RUNNING pkg_init (ver $QPKG_VER) " >> $LOGFILE
+}
+#
+######################################################################
+# Define any package specific requirement checks that shall be
+# performed before the package is installed.
+######################################################################
+#pkg_check_requirement(){
+#}
+#
+######################################################################
+# Define any package specific operations that shall be performed when
+# the package is installed.
+######################################################################
+pkg_pre_install(){
+#$CMD_RM $LOGFILE $LOGFILERC	# if required
+$CMD_TOUCH $LOGFILE $LOGFILERC
+$CMD_CHOWN httpdusr $LOGFILE $LOGFILERC
+$CMD_CHMOD 666 $LOGFILE $LOGFILERC
+echo `date ` " pre install completed (ver $QPKG_VER) " >> $LOGFILE
+}
+#
+pkg_install(){
+echo `date ` "INSTALL run completed (ver $QPKG_VER) " >> $LOGFILE
+}
+#
+pkg_post_install(){
+echo `date ` " RUNNING post install " >> $LOGFILE
+#$cd /share/Public/
+#Changing the file permissions for retentive parameters
+$CMD_CHMOD 666 /share/CACHEDEV1_DATA/.qpkg/STORJ/web/config.json
+$CMD_CHMOD 666 /share/CACHEDEV1_DATA/.qpkg/STORJ/web/rclone.json
+$CMD_CHOWN httpdusr /share/CACHEDEV1_DATA/.qpkg/STORJ
+$CMD_CHMOD 777 /share/CACHEDEV1_DATA/.qpkg/STORJ/web/conf
+$CMD_CHOWN admin /share/CACHEDEV1_DATA/.qpkg/STORJ/web/scripts/*.sh
+$CMD_CHMOD a+rx /share/CACHEDEV1_DATA/.qpkg/STORJ/web/scripts/*.sh
+$CMD_CHMOD u+s /share/CACHEDEV1_DATA/.qpkg/STORJ/web/scripts/*.sh
+
+#------------------Identity Creation----------------------------------------------
+$CMD_WGET https://github.com/storj/storj/releases/download/v1.1.1/identity_linux_amd64.zip --secure-protocol=TLSv1_2 -P /share/Public/
+$CMD_MKDIR -p /share/Public/identity
+$CMD_MKDIR -p /share/Public/identity/logs
+$CMD_MKDIR /share/Public/identity.bin
+#$CMD_RM -rf /share/Public/identity
+$CMD_MKDIR -p /root/.local/share/storj/identity
+
+$CMD_CHOWN httpdusr /share/Public/identity /share/Public/identity.bin
+$CMD_CHOWN httpdusr /root/.local/share/storj/identity
+$CMD_CHMOD a+rx /root/.local/share/storj/identity
+
+$CMD_UNZIP /share/Public/identity_linux_amd64.zip -d /share/Public/identity.bin
+$CMD_CHMOD +x /share/Public/identity.bin/identity*
+$CMD_RM /share/Public/identity_linux_amd64.zip
+#/share/Public/identity_linux_amd64 create storagenode --identity-dir /share/Public/identity  2>&1 | tee /share/Public/output.txt
+$CMD_MKDIR /id
+$CMD_CHMOD -R 777 /id
+#$CMD_CP /share/Public/identity/storagenode/ca.key /ca.key
+#$CMD_RM /share/Public/identity_linux_amd64
+#$CMD_MKDIR /share/Public/Demo_Routine
+
+# ------- cron setup ------------------------------
+BASE_PATH="/share/Web/STORJ"
+CONFIG_FILE="${BASE_PATH}/config.json"
+SJCRON="/tmp/sjcrontable"
+
+fetchCron() {
+    rm -f $SJCRON
+    # Fetch required crontab (Update user for fetch if required)
+    crontab -l > $SJCRON
+}
+addEntryToCronTable() {
+    # Update entry into crontab contents
+    grep -Fq "$1" ${SJCRON} || echo "$1" >> ${SJCRON}
+    echo "check/put entry in cron file: $1 "  >> ${LOGFILE}
+}
+updateCron() {
+    # Update to required crontab (Update user if required)
+    crontab $SJCRON
+    rm -f $SJCRON
+}
+
+# Setup CRON Tab entry
+fetchCron
+addEntryToCronTable "5 0 * * * ${BASE_PATH}/scripts/storagenodeupdate.sh ${CONFIG_FILE} "
+updateCron
+# ------- cron setup ------------------------------
+
+echo `date ` " post install COMPLETED (ver $QPKG_VER) "  >> $LOGFILE
+
+}
