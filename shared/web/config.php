@@ -64,7 +64,6 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
       'Server Address'  => $_server,
       'API Key'=> $_api,
       'Satellite' => $_satellite,
-      'Encryption Passphrase' => $_encryptionPassphrase,
       );
     file_put_contents($file, json_encode($properties));
 
@@ -335,7 +334,7 @@ code {
                           </div>
                           <div class="modal-body">
                             <p class="modal-input-title">Encryption Passphrase</p>
-                          <input style="width: 280px;" class="modal-input" id="storage_directory" name="storage_directory" placeholder="Encryption Passphrase" value="<?php if(isset($prop['Encryption Passphrase'])) echo $prop['Encryption Passphrase'] ?>"  />
+                          <input style="width: 280px;" class="modal-input" id="storage_directory" name="storage_directory" placeholder="Encryption Passphrase"   />
                             <p class="directory_token_msg msg" style="display:none;position: relative;left: 34px;">This is required Field</p>
                           </div>
                           <div class="modal-footer">
@@ -365,7 +364,6 @@ code {
         } ?>
   </div>
 <?php include 'footer.php';?>
-<!--<script src="./resources/js/jquery-3.1.1.min.js"></script>-->
 <script type="text/javascript" src="./resources/js/gateway.js"></script>
 <?php
 
@@ -383,7 +381,6 @@ function logEnvironment() {
 
 function logMessage($message) {
     $file = "/var/log/STORJ" ;
-    // $file = "test" ;
     $message = preg_replace('/\n$/', '', $message);
     $date = `date` ; $timestamp = str_replace("\n", " ", $date);
     file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);

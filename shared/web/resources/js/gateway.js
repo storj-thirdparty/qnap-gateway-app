@@ -11,6 +11,7 @@ var address_text;
   var Satellite= jQuery("#email_address").val();
   var Encryption_Passphrase = jQuery("#storage_directory").val();
 
+
   if( createAddress !== '' ){
       jQuery(".host_token_msg").hide();
       jQuery("#externalAddressbtn").hide();
@@ -208,13 +209,15 @@ var address_text;
 
 
  function showstartbutton(createAddressval,createServerval,apival,satelliteval,encryptionPassphraseval){
-  if(createAddressval === 1 && createServerval === 1 && apival === 1 && satelliteval === 1  && encryptionPassphraseval == 1 ) {
+  if(createAddressval === 1 && createServerval === 1 && apival === 1 && satelliteval === 1   ) {
 
     jQuery("#startbtn").removeAttr("disabled", true);
     jQuery("#startbtn").css("cursor", "pointer");
 
-    jQuery("#stopbtn").removeAttr("disabled", true);
-    jQuery("#stopbtn").css("cursor", "pointer");
+    if(encryptionPassphraseval===1){
+      jQuery("#stopbtn").removeAttr("disabled", true);
+      jQuery("#stopbtn").css("cursor", "pointer");
+    }
   } else{
     jQuery("#startbtn").attr("disabled", true);
     // make button cursor not-allowed
@@ -294,24 +297,10 @@ jQuery.ajax({
     success: function (resposnse) {
       if(resposnse) {
         // log message
-        if(resposnse ==0){
+        if(resposnse ==1){
           $(".editbtn").attr("disabled",true).css("cursor","not-allowed");
-
-          $("#startbtn").attr("disabled",true).css("cursor","not-allowed");
-          // $("#startbtn").removeClass("start-button");
-
-          // $("#stopbtn").attr("disabled",false).css("cursor","pointer");
-          // $("#stopbtn").addClass("stop-button");
-        }else if(resposnse ==1){
+        }else if(resposnse ==0){
           $(".editbtn").attr("disabled",false).css("cursor","pointer");
-
-          // $("#stopbtn").attr("disabled",true).css("cursor","not-allowed");
-          // $("#stopbtn").removeClass("stop-button");
-
-          // $("#stopbtn").attr("disabled",false).css("cursor","pointer");
-
-          $("#startbtn").attr("disabled",false).css("cursor","pointer");
-          // $("#startbtn").addClass("start-button");
         }
       }
     },
