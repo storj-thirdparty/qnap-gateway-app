@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------
 #  Set environment variables
 # ------------------------------------------------------------------------
-$filename = "gatewayconfig.json";
+$filename = "config.json";
 
 $platformBase   = $_SERVER['DOCUMENT_ROOT'];
 $moduleBase     = $platformBase . dirname($_SERVER['PHP_SELF']) ;
@@ -364,7 +364,7 @@ code {
         } ?>
   </div>
 <?php include 'footer.php';?>
-<script type="text/javascript" src="./resources/js/gateway.js"></script>
+<script type="text/javascript" src="./resources/js/config.js"></script>
 <?php
 
 }
