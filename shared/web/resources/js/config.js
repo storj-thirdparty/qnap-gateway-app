@@ -233,7 +233,7 @@ jQuery("#startbtn").click(function(e) {
 
     jQuery.ajax({
       type: "POST",
-      url: "gateway.php",
+      url: "config.php",
       data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isajax : 1},
       success: function (result) {
         //console.log("I am here");
@@ -255,7 +255,7 @@ jQuery("#stopbtn").click(function(e) {
 
     jQuery.ajax({
       type: "POST",
-      url: "gateway.php",
+      url: "config.php",
       data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isConfig : 1},
       success: function (result) {
         //console.log("I am here");
@@ -276,7 +276,7 @@ jQuery("#stopbtn").click(function(e) {
 jQuery("#updatebtn").click(function(e) {
     jQuery.ajax({
       type: "POST",
-      url: "gateway.php",
+      url: "config.php",
       data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isUpdateAjax : 1},
       success: function (result) {
         //console.log("I am here");
@@ -292,7 +292,7 @@ jQuery("#updatebtn").click(function(e) {
 
 jQuery.ajax({
     type: "POST",
-    url: "gateway.php",
+    url: "config.php",
     data: { isrun : 1},
     success: function (resposnse) {
       if(resposnse) {
