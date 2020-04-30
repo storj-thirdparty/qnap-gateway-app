@@ -2,17 +2,17 @@
 	<div class="screen wizard">
 
 		<div class="setup-dot"></div>
-		<p class="setup-label">Gateway Setup</p>
+		<p class="setup-label" v-bind:class="{ 'label-active': step == 1 }">Gateway Setup</p>
 
 		<div class="bar-1" v-bind:class="{ 'bar-active': step > 1 }"></div>
 
 		<div class="keys-dot" v-bind:class="{ 'dot-active': step > 1 }"></div>
-		<p class="keys-label" v-bind:class="{ 'label-active': step > 1 }">Save Keys</p>
+		<p class="keys-label" v-bind:class="{ 'label-active': step == 2 }">Save Keys</p>
 
 		<div class="bar-2" v-bind:class="{ 'bar-active': step > 2 }"></div>
 
-		<div class="configure-dot"></div>
-		<p class="configure-label">Configure HBS 3</p>
+		<div class="configure-dot" v-bind:class="{ 'dot-active': step > 2 }" ></div>
+		<p class="configure-label" v-bind:class="{ 'label-active': step == 3 }">Configure HBS 3</p>
 
 		<div class="step-1" v-if="step === 1">
 			<div class="signup"></div>
@@ -100,6 +100,7 @@ module.exports = {
 </script>
 
 <style scoped>
+
 .setup-dot {
 	position: absolute;
 	width: 20px;
@@ -110,17 +111,17 @@ module.exports = {
 	border-radius: 10px;
 
 	background: #2683FF;
+
 }
 
 .setup-label {
 	position: absolute;
-	width: 83px;
 	height: 18px;
 	left: 390px;
-	top: 125px;
+	top: 126px;
 
 
-	font-weight: bold;
+	font-weight: normal;
 	font-size: 12px;
 	line-height: 148.31%;
 	/* identical to box height, or 18px */
@@ -129,7 +130,7 @@ module.exports = {
 	align-items: center;
 	text-align: center;
 
-	color: #000000;
+	color: rgba(0, 0, 0, 0.4);
 }
 
 .bar-1 {
@@ -149,6 +150,7 @@ module.exports = {
 	background: #2683FF !important;
 }
 
+
 .keys-dot {
 	position: absolute;
 	width: 20px;
@@ -163,10 +165,9 @@ module.exports = {
 
 .keys-label {
 	position: absolute;
-	width: 59px;
 	height: 18px;
 	left: 688px;
-	top: 125px;
+	top: 126px;
 
 
 	font-weight: normal;
@@ -206,12 +207,15 @@ module.exports = {
 	background: #C5CBDB;
 }
 
+.dot-active {
+	background: #2683FF;
+}
+
 .configure-label {
 	position: absolute;
-	width: 95px;
 	height: 18px;
 	left: 957px;
-	top: 125px;
+	top: 126px;
 
 
 	font-weight: normal;
@@ -224,6 +228,15 @@ module.exports = {
 	text-align: center;
 
 	color: rgba(0, 0, 0, 0.4);
+}
+
+.label-active {
+	font-family: Inter;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 148.31%;
+
+	color: #000000;
 }
 
 .step-1 .signup {
@@ -525,7 +538,7 @@ module.exports = {
 
 	text-indent: 20px;
 
-	color: rgba(56, 75, 101, 0.4);
+	color: #384B65;
 }
 
 .step-1 .continue {
@@ -540,6 +553,7 @@ module.exports = {
 	border: 2px solid #2683FF;
 	box-sizing: border-box;
 	border-radius: 6px;
+	cursor: pointer;
 
 
 	font-weight: bold;
@@ -561,6 +575,10 @@ module.exports = {
 
 	background: #FEFEFF;
 	border-radius: 6px;
+}
+
+.step .back {
+	cursor: pointer;
 }
 
 .step .back .icon {
@@ -764,6 +782,7 @@ module.exports = {
 
 	background: #2683FF;
 	border-radius: 6px;
+	cursor: pointer;
 
 
 	font-weight: bold;
@@ -849,6 +868,7 @@ module.exports = {
 	border: 2px solid #2683FF;
 	box-sizing: border-box;
 	border-radius: 6px;
+	cursor: pointer;
 
 
 	font-weight: bold;
