@@ -20,7 +20,7 @@
 			<button class="signup-button">Sign Up</button>
 
 			<div class="background">
-				<img class="logo" src="resources/img/qnap-tardigrade.png">
+				<img class="logo" src="resources/img/gateway-logo.svg">
 
 				<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
 				<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
@@ -461,7 +461,29 @@ module.exports = {
 
 	text-indent: 20px;
 
-	color: rgba(56, 75, 101, 0.4);
+	color: #384B65;
+}
+
+.step-1 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: rgba(56, 75, 101, 0.4);
+}
+.step-1 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: rgba(56, 75, 101, 0.4);
+   opacity:  1;
+}
+.step-1 ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: rgba(56, 75, 101, 0.4);
+   opacity:  1;
+}
+.step-1 :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: rgba(56, 75, 101, 0.4);
+}
+.step-1 ::-ms-input-placeholder { /* Microsoft Edge */
+   color: rgba(56, 75, 101, 0.4);
+}
+
+.step-1 ::placeholder { /* Most modern browsers support this now. */
+   color: rgba(56, 75, 101, 0.4);
 }
 
 .step-1 .passphrase-label {
