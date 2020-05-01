@@ -29,11 +29,12 @@
 
 				<h2 class="bucket-details">Bucket Details</h2>
 
-				<label class="sattelite-label">Sattelite</label>
+				<label class="satellite-label">Satellite</label>
 
-				<select class="sattelite" v-model="sattelite">
+				<select class="satellite" v-model="satellite">
 					<option default value="us-central-1.tardigrade.io">us-central-1.tardigrade.io</option>
 					<option value="europe-west-1.tardigrade.io">europe-west-1.tardigrade.io</option>
+					<option value="asia-east-1.tardigrade.io">asia-east-1.tardigrade.io</option>
 				</select>
 
 				<label class="api-key-label">API Key</label>
@@ -48,10 +49,10 @@
 
 		<div class="step step-2" v-if="step === 2">
 			<div class="background">
-				<div class="back">
+				<!--<div class="back">
 					<img src="resources/img/back.png" class="icon">
-					<p>Back to Keys</p>
-				</div>
+					<router-link to="/">Back to Keys</router-link>
+				</div>-->
 
 				<h1 class="title">Save Your Keys</h1>
 				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You’ll need both later for configuring HSB 3 to backup your QNAP.</p>
@@ -72,7 +73,7 @@
 			<div class="background">
 				<div class="back">
 					<img src="resources/img/back.png" class="icon">
-					<p>Back to Keys</p>
+					<router-link to="/">Back to Keys</router-link>
 				</div>
 
 				<h1 class="title">Configure HBS 3</h1>
@@ -393,7 +394,7 @@ module.exports = {
 	color: #0D1826;
 }
 
-.step-1 .sattelite-label {
+.step-1 .satellite-label {
 	position: absolute;
 	width: 61px;
 	height: 16px;
@@ -412,7 +413,7 @@ module.exports = {
 	color: #384B65;
 }
 
-.step-1 .sattelite {
+.step-1 .satellite {
 	position: absolute;
 	left: 480px;
 	top: 154px;
@@ -589,12 +590,11 @@ module.exports = {
 	width: 6.5px;
 }
 
-.step .back p {
+.step .back a {
 	position: absolute;
 
 	left: 52.5px;
 	top: 25px;
-
 
 	font-weight: bold;
 	font-size: 14px;
