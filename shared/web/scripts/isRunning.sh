@@ -1,8 +1,8 @@
 #!/bin/bash
-# This script starts storagenode 
-PKGNAME="STORJ"
+# This script checks the running of gateway container
+PKGNAME="GATEWAY"
 LOG="/var/log/$PKGNAME"
-CONTAINER_NAME=storjlabsSnContainer
+CONTAINER_NAME=storjlabsgateway
 if [[ $# -gt 0 ]]
 then
     CONTAINER_NAME=$1

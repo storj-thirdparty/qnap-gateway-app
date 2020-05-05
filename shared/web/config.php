@@ -3,22 +3,18 @@
 # ------------------------------------------------------------------------
 #  Set environment variables
 # ------------------------------------------------------------------------
-$filename = "gatewayconfig.json";
+$filename = "config.json";
 
 $platformBase   = $_SERVER['DOCUMENT_ROOT'];
 $moduleBase     = $platformBase . dirname($_SERVER['PHP_SELF']) ;
 $scriptsBase    = $moduleBase . '/scripts' ;
-$rootBase = "/root/.local/share/storj/identity" ;
 
 
 $file           = $moduleBase  . DIRECTORY_SEPARATOR . $filename  ;
-$startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'storagenodestart.sh' ;
-$stopScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'storagenodestop.sh' ;
-$updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'storagenodeupdate.sh' ;
-$checkScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'checkStorj.sh' ;
+$startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayrunsh' ;
+$configureScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayconfigure.sh' ;
+$updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayupdate.sh' ;
 $isRunning      = $scriptsBase . DIRECTORY_SEPARATOR . 'isRunning.sh' ;
-$storageBinary  = $scriptsBase . DIRECTORY_SEPARATOR . 'storagenode' ;
-$yamlPath = $scriptsBase . DIRECTORY_SEPARATOR . 'docker-compose_base.yml' ;
 logMessage("------------------------------------------------------------------------------");
 logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($scriptsBase)");
 # ------------------------------------------------------------------------
@@ -27,7 +23,7 @@ logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($sc
 $output = "";
 
 if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
-    logMessage("config called up with isajax 1 ");
+    logMessage("config.php called up with isStartajax 1 ");
     logEnvironment() ;
 
 
@@ -42,7 +38,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     shell_exec("chmod 777 $stopScript 2>&1");
     
 
-    $output = shell_exec("/bin/bash $startScript $_address $_wallet $_emailId $_storage $_identity_directory $_directory 2>&1 ");
+    $output = shell_exec("/bin/bash $startScript $_address $_encryptionPassphrase $_server  2>&1 ");
 
     $jsonString = file_get_contents($file);
     $data = json_decode($jsonString, true);
@@ -64,15 +60,14 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
       'Server Address'  => $_server,
       'API Key'=> $_api,
       'Satellite' => $_satellite,
-      'Encryption Passphrase' => $_encryptionPassphrase,
       );
     file_put_contents($file, json_encode($properties));
 
     $content = file_get_contents($file);
     $properties = json_decode($content, true);
 
-    logMessage("config called up with isStopAjax 1 ");
-    $output = shell_exec("bash $stopScript 2>&1 ");
+    logMessage("config.php called up with isConfgigureAjax 1 ");
+    $output = shell_exec("/bin/bash $configureScript $_address $_encryptionPassphrase $_server 2>&1 ");
 
     /* Update File again with Log value as well */
     $properties['last_log'] = $output ;
@@ -84,6 +79,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
 
     logMessage("config called up with isUpdateAjax 1 ");
     $server_address = $_SERVER['SERVER_ADDR'] ;
+    //Log to be worked upon to correct the path and parameters
     $output = shell_exec("/bin/bash $updateScript $file $_address $_wallet $_emailId $_storage $_identity_directory $_directory $server_address 2>&1 ");
 
     /* Update File again with Log value as well */
@@ -335,7 +331,7 @@ code {
                           </div>
                           <div class="modal-body">
                             <p class="modal-input-title">Encryption Passphrase</p>
-                          <input style="width: 280px;" class="modal-input" id="storage_directory" name="storage_directory" placeholder="Encryption Passphrase" value="<?php if(isset($prop['Encryption Passphrase'])) echo $prop['Encryption Passphrase'] ?>"  />
+                          <input style="width: 280px;" class="modal-input" id="storage_directory" name="storage_directory" placeholder="Encryption Passphrase"   />
                             <p class="directory_token_msg msg" style="display:none;position: relative;left: 34px;">This is required Field</p>
                           </div>
                           <div class="modal-footer">
@@ -365,8 +361,7 @@ code {
         } ?>
   </div>
 <?php include 'footer.php';?>
-<!--<script src="./resources/js/jquery-3.1.1.min.js"></script>-->
-<script type="text/javascript" src="./resources/js/gateway.js"></script>
+<script type="text/javascript" src="./resources/js/config.js"></script>
 <?php
 
 }
@@ -382,8 +377,7 @@ function logEnvironment() {
 }
 
 function logMessage($message) {
-    $file = "/var/log/STORJ" ;
-    // $file = "test" ;
+    $file = "/var/log/GATEWAY" ;
     $message = preg_replace('/\n$/', '', $message);
     $date = `date` ; $timestamp = str_replace("\n", " ", $date);
     file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);
