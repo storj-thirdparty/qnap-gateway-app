@@ -6,7 +6,7 @@ echo `date` "GATEWAY is starting" >> $LOG
 
 export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
 IPADDR=$(ip -4 -o addr show eth0 | awk '{print $4}' | cut -d "/" -f 1)
-PORTADDR=$(sed -e 's#.*:\(\)#\1#' <<< "${1}")
+#PORTADDR=$(sed -e 's#.*:\(\)#\1#' <<< "${1}")
 CONTAINER_NAME=storjlabsgateway
 
 echo `date` " Starting Storagenode ${CONTAINER_NAME} ---> " >> $LOG

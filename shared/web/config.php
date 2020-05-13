@@ -22,6 +22,29 @@ logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($sc
 
 $output = "";
 
+$data = json_decode(file_get_contents("php://input"), TRUE);
+
+ // Saving Api Key, Encryption Passphrase and Satellite in JSON file.
+if(isset($data['apiKey']) && isset($data['passphrase']) && isset($data['satellite'])){
+
+    $apiKey = $data['apiKey'];
+    $passphrase = $data['passphrase'];
+    $satellite = $data['satellite'];
+    $jsonString = file_get_contents($file);
+    $data = json_decode($jsonString, true);
+
+    $data['APIKey'] = $apiKey;
+    $data['EncryptionPassphrase'] = $passphrase;
+    $data['Satellite'] = $satellite;
+
+     $data['AccessKey'] = "TestAccessKey";
+    $data['SecretKey'] = "TestSecretKey";
+
+    $newJsonString = json_encode($data);
+    file_put_contents($file, $newJsonString);
+  }
+
+
 if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     logMessage("config.php called up with isStartajax 1 ");
     logEnvironment() ;
@@ -58,7 +81,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     $properties = array(
       'Port'  => $_address,
       'Server Address'  => $_server,
-      'API Key'=> $_api,
+      'APIKey'=> $_api,
       'Satellite' => $_satellite,
       );
     file_put_contents($file, json_encode($properties));
@@ -97,15 +120,40 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     } else {
   echo $output;
     }
- } 
+ }
+
+ //Stoping Gateway Process.
+ else if(isset($_POST['isStop']) && ($_POST['isStop'] == 1)){
+
+
+ }
+
+
 
   // checking is storagenode is running.
   else if(isset($_POST['isrun']) && ($_POST['isrun'] == 1)) {
     $output = shell_exec("/bin/bash $isRunning ");
     logMessage("Run status of container is $output ");
-    // echo $output ;
-    echo 0 ;
+    echo $output ;
+    // echo 0 ;
   }
+
+
+ // Checking Geteway Status
+  else if(isset($data['status']) ){
+    if($data['status'] =="Start Gateway"){
+       echo "Conneted";
+    }else if ($data['status'] =="Stop Gateway") {
+      echo "Stopped";
+    }else if ($data['status'] =="Restart Gateway") {
+      echo "Restarting";
+    }else if ($data['status'] =="Cheking Process") {
+      // Checking Geteway Process running or not
+      echo "Conneted";
+    }
+  }
+
+
 
  else {
   // DEFAULT : Load contents at start
@@ -116,6 +164,11 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
   $content = file_get_contents($file);
   $prop = json_decode($content, true);
   logMessage("Loaded properties : " . print_r($prop, true));
+
+
+      if($prop['Port'] == "" && $prop['Port'] == null && $prop['Server Address'] == "" && $prop['Server Address'] == null && $prop['APIKey'] == "" && $prop['APIKey'] == null && $prop['Satellite'] == "" && $prop['Satellite'] == null && $prop['EncryptionPassphrase'] == "" && $prop['EncryptionPassphrase'] == null  && $prop['AccessKey'] == "" && $prop['SecretKey'] == null && $prop['AccessKey'] == null && $prop['SecretKey'] == ""){
+      echo "<script>location.href = 'wizard.html';</script>";
+    }
   }
 
 {
@@ -139,6 +192,8 @@ code {
   // TODO: REMOVE this once this works OK
           if ( $output ){
           } else {
+
+            $rootBase ="";
 
             $file1 = "${rootBase}/storagenode/ca.cert";
             $file2 = "${rootBase}/storagenode/ca.key";
@@ -259,7 +314,7 @@ code {
                           </div>
                           <div class="modal-body">
                             <p class="modal-input-title">API Key</p>
-                            <input class="modal-input shorter" id="storage_allocate" name="storage_allocate" type="text" step="1" min="1" class="quantity" placeholder="Storj API Key" value="<?php if(isset($prop['API Key'])) echo $prop['API Key'] ?>"/>
+                            <input class="modal-input shorter" id="storage_allocate" name="storage_allocate" type="text" step="1" min="1" class="quantity" placeholder="Storj API Key" value="<?php if(isset($prop['APIKey'])) echo $prop['APIKey'] ?>"/>
                           <p class="storage_token_msg msg" style="display:none;">This is required Field</p>
                           </div>
                           <div class="modal-footer">
@@ -347,9 +402,10 @@ code {
 
                 <div class="bottom-buttons">
                    <button type="button" class="btn btn-primary configbtns" id="updatebtn">Update Gateway</button>
-                  <div style="position: absolute;display: inline-block;left: 40%;">
+                  <div style="position: absolute;display: inline-block;left: 30%;">
                     <button type="button" disabled  id="stopbtn" class="btn btn-primary configbtns" style="cursor: not-allowed;">Configure Gateway</button>&nbsp;&nbsp;
                   <button type="button"  id="startbtn" class="btn btn-primary configbtns">Run Gateway</button>
+                  <button type="button"  id="stop" class="btn btn-primary configbtns" >Stop Gateway</button>
                 </div><br><br>
               <!-- log message -->
               <iframe>
@@ -378,6 +434,7 @@ function logEnvironment() {
 
 function logMessage($message) {
     $file = "/var/log/GATEWAY" ;
+     // $file = "test" ;
     $message = preg_replace('/\n$/', '', $message);
     $date = `date` ; $timestamp = str_replace("\n", " ", $date);
     file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);

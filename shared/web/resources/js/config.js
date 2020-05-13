@@ -289,6 +289,28 @@ jQuery("#updatebtn").click(function(e) {
 });
 
 
+jQuery("#stop").click(function(e) {
+
+    jQuery.ajax({
+      type: "POST",
+      url: "config.php",
+      data: {isStop : 1},
+      success: function (result) {
+        //console.log("I am here");
+        window.location.reload();
+
+        // // log message
+         $('iframe').contents().find('body').html('<p>'+result+'</p>');
+
+      },
+      error: function () {
+        // log message
+         $('iframe').contents().find('body').html('<p>'+result+'</p>');
+        console.log("In there wrong");
+      }
+    });
+});
+
 
 jQuery.ajax({
     type: "POST",
@@ -299,8 +321,10 @@ jQuery.ajax({
         // log message
         if(resposnse ==1){
           $(".editbtn").attr("disabled",true).css("cursor","not-allowed");
+          $("#stop").attr("disabled",false).css("cursor","pointer");
         }else if(resposnse ==0){
           $(".editbtn").attr("disabled",false).css("cursor","pointer");
+          $("#stop").attr("disabled",true).css("cursor","not-allowed");
         }
       }
     },

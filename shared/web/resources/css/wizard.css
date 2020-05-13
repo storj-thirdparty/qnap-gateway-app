@@ -52,13 +52,13 @@ a {
 }
 
 body {
-	background: rgb(240, 242, 244);
-	font-family: "Inter";
+	background: rgb(240, 242, 244) ! important;
+	font-family: "Inter" ! important;
 }
 
 .screen {
 	position: relative;
-	width: 1440px;
+	/*width: 1440px;*/
 
 	margin-left: auto;
 	margin-right: auto;
@@ -116,7 +116,8 @@ nav .docs {
 	position: absolute;
 	width: 147px;
 	height: 45px;
-	left: 1100px;
+	/*left: 1100px;*/
+	left: 968px;
 	top: 7px;
 
 	font-family: Inter;
@@ -133,11 +134,35 @@ nav .docs {
 	color: #FFFFFF;
 }
 
+nav .home {
+	position: absolute;
+	width: 147px;
+	height: 45px;
+	/*left: 1100px;*/
+	left: 860px;
+	top: 7px;
+
+	font-family: Inter;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 145%;
+	/* or 20px */
+
+	display: flex;
+	align-items: center;
+	text-align: center;
+
+	color: #FFFFFF;
+}
+
+
 nav .login {
 	position: absolute;
 	width: 147px;
 	height: 45px;
-	left: 1263px;
+	/*left: 1263px;*/
+	left: 1137px;
 	top: 7px;
 
 	font-family: Inter;
@@ -152,4 +177,16 @@ nav .login {
 	text-align: right;
 
 	color: #FFFFFF;
+}
+
+.status-title[data-v-6a0755c9]{
+	top: 35px ! important;
+}
+
+.bucket-title{
+	top: 53px ! important;
+}
+
+.gateway-title{
+	top: 30px ! important;
 }
