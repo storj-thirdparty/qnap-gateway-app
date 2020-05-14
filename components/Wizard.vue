@@ -1,6 +1,5 @@
 <template>
 	<div class="screen wizard">
-
 		<div class="setup-dot"></div>
 		<p class="setup-label" v-bind:class="{ 'label-active': step == 1 }">Gateway Setup</p>
 
@@ -20,7 +19,7 @@
 			<button class="signup-button">Sign Up</button>
 
 			<div class="background">
-				<img class="logo" src="resources/img/gateway-logo.svg">
+				<img class="logo" src="../../resources/img/gateway-logo.svg">
 
 				<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
 				<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
@@ -38,32 +37,29 @@
 				</select>
 
 				<label class="api-key-label">API Key</label>
-				<input type="text" class="api-key" placeholder="Enter pre-generated API key" v-model="apiKey">
+				<input type="text" class="api-key" placeholder="Enter pre-generated API key" v-model="apiKey" v-bind:class="{ invalid: !apiKey }" value="">
 
 				<label class="passphrase-label">Encryption Passphrase</label>
 				<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
 
-				<button class="continue" v-on:click="step++">Continue</button>
+				<button class="continue" id="btn" @click="UpdateData()" v-bind:disabled="!apiKey">Continue <i class="fa fa-spinner fa-spin dnone" id="loader"></i></button>
 			</div>
 		</div>
 
 		<div class="step step-2" v-if="step === 2">
 			<div class="background">
-				<!--<div class="back">
-					<img src="resources/img/back.png" class="icon">
-					<router-link to="/">Back to Keys</router-link>
-				</div>-->
-
 				<h1 class="title">Save Your Keys</h1>
 				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You’ll need both later for configuring HSB 3 to backup your QNAP.</p>
 
+				<p id="copymsg"></p>
+
 				<label class="access-key-label">Access Key</label>
-				<input type="text" class="access-key" value="35EzMZowEWjh9BJAv5okf2Sif9YV"></label>
-				<button class="access-key-copy">Copy</button>
+				<input type="text" class="access-key" value="35EzMZowEWjh9BJAv5okf2Sif9YV" v-model="accesskey" v-bind:class="{ invalid: !accesskey }" readonly></label>
+				<button class="access-key-copy" @click.stop.prevent="copyAccessKey">Copy</button>
 
 				<label class="secret-key-label">Secret Key</label>
-				<input type="text" class="secret-key" value="2sHDQ6n8rPLuhBve8aaWrR3Grq55">
-				<button class="secret-key-copy">Copy</button>
+				<input type="text" class="secret-key" value="2sHDQ6n8rPLuhBve8aaWrR3Grq55" v-model="secretkey" readonly>
+				<button class="secret-key-copy" @click.stop.prevent="copySecretKey">Copy</button>
 
 				<button class="continue" v-on:click="step++">Continue</button>
 			</div>
@@ -72,13 +68,13 @@
 		<div class="step step-3" v-if="step === 3">
 			<div class="background">
 				<div class="back">
-					<img src="resources/img/back.png" class="icon">
+					<img src="../../resources/img/back.png" class="icon">
 					<router-link to="/">Back to Keys</router-link>
 				</div>
 
 				<h1 class="title">Configure HBS 3</h1>
 
-				<img src="resources/img/hbs3.png" class="hbs3">
+				<img src="../../resources/img/hbs3.png" class="hbs3">
 
 				<p class="explaination">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
 
@@ -93,10 +89,118 @@ module.exports = {
 	data: () => ({
 		step: 1,
 
-		satellite: 'us-central-1.tardigrade.io',
+		satellite: '',
 		apiKey: '',
-		passphrase: ''
-	})
+		passphrase: '',
+		accesskey: 'test',
+		secretkey: 'test123',
+	}),
+
+
+		computed: {
+
+			apiKey() {
+				return this.apiKey.length > 1;
+			},
+
+			passphrase() {
+				return this.passphrase.length > 1;
+			},
+
+			accesskey() {
+				return this.accesskey.length > 1;
+			},
+
+			secretkey() {
+				return this.secretkey.length > 1;
+			},
+
+			satellite() {
+				return this.satellite.length > 1;
+			},
+
+		},
+
+
+	methods: {
+        fetchData(){
+		     axios.get(this.baseUrl + '../../config.json').then(response => {
+		        this.satellite = response.data.Satellite;
+		        this.apiKey = response.data.APIKey;
+		        this.passphrase = response.data.EncryptionPassphrase;
+		        this.accesskey = response.data.AccessKey;
+		        this.secretkey = response.data.SecretKey;
+		     })
+		  },
+
+		  	UpdateData() {
+				const data = {
+					apiKey: this.apiKey,
+					passphrase: this.passphrase,
+					satellite: this.satellite,
+				};
+
+
+				axios.post('config.php', data);
+
+				document.getElementById("btn").classList.add("opacity");
+				document.getElementById("loader").classList.remove("dnone");
+
+				setTimeout(() => this.UpdateAccessSecretKey(), 5000);
+			},
+
+
+			copyAccessKey () {
+			  document.getElementById("copymsg").classList.remove("dnone");
+        	  document.getElementById("copymsg").textContent="";
+	          let accessKeyToCopy = document.querySelector('.access-key')
+	          accessKeyToCopy.setAttribute('type', 'text')
+	          accessKeyToCopy.select()
+
+	          try {
+	            var successful = document.execCommand('copy');
+	            var msg = successful ? 'successful' : 'unsuccessful';
+	            document.getElementById("copymsg").textContent="Access Key Copied to Clipboard";
+	          } catch (err) {
+	            document.getElementById("copymsg").textContent="Oops, unable to copy";
+	          }
+
+	          setTimeout(() => document.getElementById("copymsg").classList.add("dnone"), 2000);
+        	},
+
+        	copySecretKey () {
+        	  document.getElementById("copymsg").classList.remove("dnone");
+        	  document.getElementById("copymsg").textContent="";
+	          let secretKeyToCopy = document.querySelector('.secret-key')
+	          secretKeyToCopy.setAttribute('type', 'text')
+	          secretKeyToCopy.select()
+
+	          try {
+	            var successful = document.execCommand('copy');
+	            var msg = successful ? 'successful' : 'unsuccessful';
+	            document.getElementById("copymsg").textContent="Secret Key Copied to Clipboard";
+	          } catch (err) {
+	            document.getElementById("copymsg").textContent="Oops, unable to copy";
+	          }
+	          setTimeout(() => document.getElementById("copymsg").classList.add("dnone"), 2000);
+        	},
+
+        	UpdateAccessSecretKey () {
+        		this.step++;
+        		axios.get(this.baseUrl + '../../config.json').then(response => {
+			        this.accesskey = response.data.AccessKey;
+			        this.secretkey = response.data.SecretKey;
+		     	})
+        	}
+
+
+    },
+
+    created () {
+        // Fetch Data
+    	this.fetchData();
+    },
+
 };
 </script>
 
@@ -878,5 +982,29 @@ module.exports = {
 	text-align: center;
 
 	color: #FFFFFF;
+}
+
+#loader{
+	position: absolute;
+    margin-left: -54px;
+    margin-top: -8px;
+    font-size: 2.2em;
+}
+
+.dnone{
+	display: none;
+}
+
+.opacity{
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+#copymsg{
+	position: absolute;
+    right: 25px;
+    top: 25px;
+    color: green;
+    font-weight: 800;
 }
 </style>

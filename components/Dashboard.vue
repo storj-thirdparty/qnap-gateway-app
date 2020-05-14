@@ -1,9 +1,17 @@
 <template>
 	<div class="screen">
+		<modal v-show="isModalVisible" @close="closeModal"/>
 		<div class="status-box">
 			<h2 class="status-title">Status</h2>
-			<div class="status-light"></div>
-			<p class="status-text">Connected</p>
+			<div id="status-light" class="statusicons"></div>
+			<i class="fa fa-repeat dnone statusicons" aria-hidden="true" id="restart-icon"></i>
+			<div class="dnone statusicons" id="status-red"></div>
+			<select class="status-text" v-on:change="changeItem($event)" id="selectstatus">
+				<option id="first" disabled></option>
+				<option selected id="start">Start Gateway</option>
+				<option id="stop">Stop Gateway</option>
+				<option id="restart">Restart Gateway</option>
+			</select>
 		</div>
 
 		<div class="gateway-box">
@@ -11,22 +19,22 @@
 
 			<p class="access-key-label">Access Key</p>
 
-			<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false">Show <img src="resources/img/show.png"></p>
-			<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true">Hide <img src="resources/img/hide.png"></p>
+			<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false">Show <img src="../../resources/img/show.png"></p>
+			<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true">Hide <img src="../../resources/img/hide.png"></p>
 
 			<input v-bind:type="accessKeyInputType" disabled class="access-key" v-model="accessKey">
 
 			<p class="secret-key-label">Secret Key</p>
 
-			<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false">Show <img src="resources/img/show.png"></p>
-			<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true">Hide <img src="resources/img/hide.png"></p>
+			<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false">Show <img src="../../resources/img/show.png"></p>
+			<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true">Hide <img src="../../resources/img/hide.png"></p>
 
 			<input v-bind:type="secretKeyInputType" disabled class="secret-key" v-model="secretKey">
 		</div>
 
 		<div class="bucket-box">
 			<div class="reconfigure">
-				<router-link to="/wizard">Reconfigure</router-link>
+				<a @click="showModal">Reconfigure</a>
 			</div>
 
 			<h2 class="bucket-title">Bucket Details</h2>
@@ -44,26 +52,106 @@
 </template>
 
 <script>
-module.exports = {
-	data: () => ({
-		accessKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+  import modal from '../components/modal.vue';
+
+  export default {
+    name: 'app',
+    components: {
+      modal,
+    },
+    data () {
+      return {
+        isModalVisible: false,
+        accessKey: '',
 		accessKeyShown: true,
 
-		secretKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+		secretKey: '',
 		secretKeyShown: false,
 
-		satellite: 'us-central-1.tardigrade.io'
-	}),
-	computed: {
+		satellite: '',
+		selected: "",
+      };
+    },
+    methods: {
+      showModal() {
+        this.isModalVisible = true;
+      },
+      closeModal() {
+        this.isModalVisible = false;
+      },
+      fetchData(){
+	     axios.get(this.baseUrl + '../../config.json').then(response => {
+	        this.satellite = response.data.Satellite;
+	        this.accessKey = response.data.AccessKey;
+	        this.secretKey = response.data.SecretKey;
+	     })
+	 },
+
+	 changeItem: function changeItem(event) {
+
+	 		this.status(event.target.value);
+	 },
+
+	 async status(status) {
+	 	if (status == "Start Gateway") {
+
+	 		document.getElementById("status-red").classList.add("dnone");
+	 		document.getElementById("restart-icon").classList.add("dnone");
+	 		document.getElementById("status-light").classList.remove("dnone");
+
+	 		document.getElementById("start").removeAttribute("enabled", "");
+	 		document.getElementById("start").setAttribute("disabled", "");
+	 		document.getElementById("stop").removeAttribute("disabled", "");
+	 		document.getElementById("stop").setAttribute("enabled", "");
+	 		document.getElementById("restart").removeAttribute("disabled", "");
+	 		document.getElementById("restart").setAttribute("enabled", "");
+
+	 	}else if(status == "Stop Gateway"){
+
+	 		document.getElementById("restart-icon").classList.add("dnone");
+	 		document.getElementById("status-light").classList.add("dnone");
+	 		document.getElementById("status-red").classList.remove("dnone");
+
+	 		document.getElementById("stop").removeAttribute("enabled", "");
+	 		document.getElementById("stop").setAttribute("disabled", "");
+	 		document.getElementById("start").removeAttribute("disabled", "");
+	 		document.getElementById("start").setAttribute("enabled", "");
+	 		document.getElementById("restart").removeAttribute("disabled", "");
+	 		document.getElementById("restart").setAttribute("enabled", "");
+
+	 	}else if(status == "Restart Gateway"){
+	 		document.getElementById("status-light").classList.add("dnone");
+	 		document.getElementById("status-red").classList.add("dnone");
+	 		document.getElementById("restart-icon").classList.remove("dnone");
+
+	 	}
+
+	 	const {data} = await axios.post('config.php', {
+			status: status
+		});
+
+		document.getElementById("first").selected = true;
+		document.getElementById("first").textContent = data;
+	 }
+
+    },
+    computed: {
 		accessKeyInputType() {
 			return this.accessKeyShown ? 'text' : 'password';
 		},
 
 		secretKeyInputType() {
 			return this.secretKeyShown ? 'text' : 'password';
-		}
-	}
-};
+		},
+
+	},
+
+	 created () {
+        // Fetch Data
+    	this.fetchData();
+    	this.status("Cheking Process");
+	 },
+  };
 </script>
 
 <style scoped>
@@ -94,7 +182,7 @@ module.exports = {
 	color: #0D1826;
 }
 
-.status-light {
+#status-light {
 	position: absolute;
 	left: 249px;
 	top: 60px;
@@ -107,18 +195,40 @@ module.exports = {
 	background: #37FDCE;
 }
 
+#status-red {
+	position: absolute;
+	left: 249px;
+	top: 60px;
+
+	width: 12px;
+	height: 12px;
+
+	border-radius: 6px;
+
+	background: red;
+}
+
+#restart-icon{
+	position: absolute;
+    left: 249px;
+    top: 58px;
+    color: lightgray;
+}
+
 .status-text {
 	position: absolute;
 	left: 269px;
 	top: 58px;
 
-	width: 84px;
+	width: 125px;
 	height: 16px;
 
 	display: flex;
 	align-items: center;
 
 	color: rgba(0, 0, 0, 0.7);
+	background: white;
+    border: none;
 }
 
 .gateway-box {
@@ -335,7 +445,7 @@ module.exports = {
 .reconfigure {
 	position: absolute;
 	left: 352px;
-	top: 74px;
+	top: 52px;
 
 	width: 127px;
 	height: 14px;
@@ -349,6 +459,7 @@ module.exports = {
 
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 }
 
 .reconfigure > * {
@@ -509,5 +620,9 @@ module.exports = {
 	text-indent: 20px;
 
 	color: rgba(56, 75, 101, 0.75);
+}
+
+.dnone{
+	display: none;
 }
 </style>
