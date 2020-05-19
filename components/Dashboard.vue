@@ -6,13 +6,19 @@
 			<div id="status-light" class="statusicons"></div>
 			<i class="fa fa-repeat dnone statusicons" aria-hidden="true" id="restart-icon"></i>
 			<div class="dnone statusicons" id="status-red"></div>
-			<select class="status-text" v-on:change="changeItem($event)" id="selectstatus">
-				<option id="first" disabled></option>
-				<option selected id="start">Start Gateway</option>
-				<option id="stop">Stop Gateway</option>
-				<option id="restart">Restart Gateway</option>
-			</select>
+
+			<div class="dropdown status-text">
+			    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span id="first">Connected</span>
+			    <span class="caret"></span></button>
+			    <ul class="dropdown-menu">
+			    <li id="start" class="dnone"><a id="Start Gateway" v-on:click.prevent="startstop" >Start Gateway</a></li>
+			      <li id="stop"><a id="Stop Gateway"  v-on:click.prevent="startstop">Stop Gateway</a></li>
+			      <li id="restart"><a id="Restart Gateway"  v-on:click.prevent="startstop">Restart Gateway</a></li>
+			      <li id="restart1" class="dnone"><a id="Restart Gateway" class="rs">Restart Gateway</a></li>
+   				 </ul>
+			</div>
 		</div>
+
 
 		<div class="gateway-box">
 			<h2 class="gateway-title">Gateway Config</h2>
@@ -87,51 +93,56 @@
 	     })
 	 },
 
-	 changeItem: function changeItem(event) {
 
-	 		this.status(event.target.value);
-	 },
+	  startstop: function (event) {
+            this.status(event.currentTarget.id);
+        },
 
 	 async status(status) {
-	 	if (status == "Start Gateway") {
+	 	
+	 	const {data} = await axios.post('config.php', {
+			status: status
+		});
+
+		if(data == "Restarting" || data == "Stopped" || data == "Conneted"){
+			document.getElementById("first").textContent = data;
+	 	}else{
+	 		data = "Stopped";
+	 		document.getElementById("first").textContent = data;
+	 	}
+
+	 	if (data == "Conneted") {
 
 	 		document.getElementById("status-red").classList.add("dnone");
 	 		document.getElementById("restart-icon").classList.add("dnone");
 	 		document.getElementById("status-light").classList.remove("dnone");
 
-	 		document.getElementById("start").removeAttribute("enabled", "");
-	 		document.getElementById("start").setAttribute("disabled", "");
-	 		document.getElementById("stop").removeAttribute("disabled", "");
-	 		document.getElementById("stop").setAttribute("enabled", "");
-	 		document.getElementById("restart").removeAttribute("disabled", "");
-	 		document.getElementById("restart").setAttribute("enabled", "");
+	 		document.getElementById("start").classList.add("dnone");
+	 		document.getElementById("stop").classList.remove("dnone");
 
-	 	}else if(status == "Stop Gateway"){
+	 		document.getElementById("restart").classList.remove("dnone");
+	 		document.getElementById("restart1").classList.add("dnone");
+	 		
+
+	 	}else if(data == "Stopped"){
 
 	 		document.getElementById("restart-icon").classList.add("dnone");
 	 		document.getElementById("status-light").classList.add("dnone");
 	 		document.getElementById("status-red").classList.remove("dnone");
 
-	 		document.getElementById("stop").removeAttribute("enabled", "");
-	 		document.getElementById("stop").setAttribute("disabled", "");
-	 		document.getElementById("start").removeAttribute("disabled", "");
-	 		document.getElementById("start").setAttribute("enabled", "");
-	 		document.getElementById("restart").removeAttribute("disabled", "");
-	 		document.getElementById("restart").setAttribute("enabled", "");
+	 		document.getElementById("stop").classList.add("dnone");
+	 		document.getElementById("start").classList.remove("dnone");
 
-	 	}else if(status == "Restart Gateway"){
+	 		document.getElementById("restart").classList.add("dnone");
+	 		document.getElementById("restart1").classList.remove("dnone");
+
+	 	}else if(data == "Restarting"){
 	 		document.getElementById("status-light").classList.add("dnone");
 	 		document.getElementById("status-red").classList.add("dnone");
 	 		document.getElementById("restart-icon").classList.remove("dnone");
 
 	 	}
 
-	 	const {data} = await axios.post('config.php', {
-			status: status
-		});
-
-		document.getElementById("first").selected = true;
-		document.getElementById("first").textContent = data;
 	 }
 
     },
@@ -217,7 +228,8 @@
 
 .status-text {
 	position: absolute;
-	left: 269px;
+	/*left: 269px;*/
+	left: 262px;
 	top: 58px;
 
 	width: 125px;
@@ -624,5 +636,33 @@
 
 .dnone{
 	display: none;
+}
+
+.dropdown-toggle{
+	border: none;
+}
+
+.dropdown-toggle:hover{
+	background-color: white ! important;
+}
+
+.dropdown-toggle:focus{
+	background-color: white ! important;
+}
+
+.dropdown-menu{
+	top: 147%;
+    left: -24px;
+}
+
+.rs{
+	color: lightgrey;
+	cursor: not-allowed;
+}
+
+.caret{
+	position: relative;
+    left: 10px;
+    bottom: 2px;
 }
 </style>

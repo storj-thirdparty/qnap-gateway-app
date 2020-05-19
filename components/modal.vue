@@ -57,6 +57,12 @@
     display: flex;
     flex-direction: column;
     width: 40%;
+    border-radius: 5px;
+
+    height: 225px;
+    position: absolute;
+    left: 30%;
+    top: 35%;
   }
 
   .modal-header,
@@ -72,13 +78,14 @@
   }
 
   .modal-footer {
-    border-top: 1px solid #eeeeee;
     justify-content: space-evenly;
+    border-top: none;
   }
 
   .modal-body {
     position: relative;
     padding: 20px 10px;
+    padding-top: 45px;
   }
 
   .btn-close {
@@ -93,23 +100,32 @@
 
   .btn-cancel {
     background: #FFF;
-    border: 2px solid blue;
+    border: 1px solid blue;
     border-radius: 2px;
     width: 250px;
     padding: 10px;
     color: blue;
     cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
   }
 
   .btn-yes {
     color: white;
     background: blue;
-    border: 2px solid blue;
+    border: 1px solid blue;
     border-radius: 2px;
     width: 250px;
     padding: 10px;
     text-align: center;
     margin-left: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+
+  .btn-yes:focus, .btn-yes:hover {
+    color: white;
+    text-decoration: none;
   }
 
   .head{
