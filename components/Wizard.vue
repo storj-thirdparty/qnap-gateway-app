@@ -49,10 +49,10 @@
 
 		<div class="step step-2" v-if="step === 2">
 			<div class="background">
-				<!--<div class="back">
+				<div class="back">
 					<img src="resources/img/back.png" class="icon">
-					<router-link to="/">Back to Keys</router-link>
-				</div>-->
+					<router-link to="/">Back to Gateway Setup</router-link>
+				</div>
 
 				<h1 class="title">Save Your Keys</h1>
 				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You’ll need both later for configuring HSB 3 to backup your QNAP.</p>
