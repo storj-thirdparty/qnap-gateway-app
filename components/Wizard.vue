@@ -31,7 +31,7 @@
 
 				<label class="satellite-label">Satellite</label>
 
-				<select class="satellite" v-model="satellite">
+				<select class="satellite form-select" v-model="satellite">
 					<option default value="us-central-1.tardigrade.io">us-central-1.tardigrade.io</option>
 					<option value="europe-west-1.tardigrade.io">europe-west-1.tardigrade.io</option>
 					<option value="asia-east-1.tardigrade.io">asia-east-1.tardigrade.io</option>
