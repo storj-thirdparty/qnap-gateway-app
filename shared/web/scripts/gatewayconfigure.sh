@@ -11,8 +11,8 @@ CONTAINER_NAME=storjlabsgateway
 
 echo `date` " Saving Configuration of  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd= "docker run --rm -it --name ${CONTAINER_NAME} -p ${1} -v $(2)/gateway:/root/.local/share/storj/gateway storjlabs/gateway:f8ef66c-v1.0.4-go1.13.8 --server.address ${3}"
-#cmd="docker run -d --restart no -p ${PORTADDR}:28967 -p ${IPADDR}:14002:14002 -e WALLET=${2} -e EMAIL=${3} -e ADDRESS=${1} -e STORAGE=${4}GB -v ${5}:/app/identity -v ${6}:/app/config --name ${CONTAINER_NAME} storjlabs/storagenode:beta " 
+cmd= "docker run --rm -it --name ${CONTAINER_NAME} -p ${1} -v $(pwd)/gateway:/root/.local/share/storj/gateway storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 setup --satellite-address ${3} --api-key ${4} --passphrase ${5} --non-interactive"
+
 echo "$cmd" >> $LOG
 $cmd >> $LOG 2>&1 
 echo $output >> $LOG 
