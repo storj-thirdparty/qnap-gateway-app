@@ -83,6 +83,7 @@
 				<p class="explaination">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
 
 				<button class="guide">Configuration Guide</button>
+				<!-- <a href="/" class="done">Done</a> -->
 			</div>
 		</div>
 	</div>
@@ -878,5 +879,14 @@ module.exports = {
 	text-align: center;
 
 	color: #FFFFFF;
+}
+
+.step-3 .done {
+	font-family: Inter;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: center;
+	color: #2683FF;
 }
 </style>
