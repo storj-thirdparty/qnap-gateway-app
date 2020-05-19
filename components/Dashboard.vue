@@ -1,46 +1,32 @@
 <template>
 	<div class="screen">
-		<modal v-show="isModalVisible" @close="closeModal"/>
 		<div class="status-box">
 			<h2 class="status-title">Status</h2>
-			<div id="status-light" class="statusicons"></div>
-			<i class="fa fa-repeat dnone statusicons" aria-hidden="true" id="restart-icon"></i>
-			<div class="dnone statusicons" id="status-red"></div>
-
-			<div class="dropdown status-text">
-			    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span id="first">Connected</span>
-			    <span class="caret"></span></button>
-			    <ul class="dropdown-menu">
-			    <li id="start" class="dnone"><a id="Start Gateway" v-on:click.prevent="startstop" >Start Gateway</a></li>
-			      <li id="stop"><a id="Stop Gateway"  v-on:click.prevent="startstop">Stop Gateway</a></li>
-			      <li id="restart"><a id="Restart Gateway"  v-on:click.prevent="startstop">Restart Gateway</a></li>
-			      <li id="restart1" class="dnone"><a id="Restart Gateway" class="rs">Restart Gateway</a></li>
-   				 </ul>
-			</div>
+			<div class="status-light"></div>
+			<p class="status-text">Connected</p>
 		</div>
-
 
 		<div class="gateway-box">
 			<h2 class="gateway-title">Gateway Config</h2>
 
 			<p class="access-key-label">Access Key</p>
 
-			<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false">Show <img src="../../resources/img/show.png"></p>
-			<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true">Hide <img src="../../resources/img/hide.png"></p>
+			<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false">Show <img src="resources/img/show.png"></p>
+			<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true">Hide <img src="resources/img/hide.png"></p>
 
 			<input v-bind:type="accessKeyInputType" disabled class="access-key" v-model="accessKey">
 
 			<p class="secret-key-label">Secret Key</p>
 
-			<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false">Show <img src="../../resources/img/show.png"></p>
-			<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true">Hide <img src="../../resources/img/hide.png"></p>
+			<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false">Show <img src="resources/img/show.png"></p>
+			<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true">Hide <img src="resources/img/hide.png"></p>
 
 			<input v-bind:type="secretKeyInputType" disabled class="secret-key" v-model="secretKey">
 		</div>
 
 		<div class="bucket-box">
 			<div class="reconfigure">
-				<a @click="showModal">Reconfigure</a>
+				<router-link to="/wizard">Reconfigure</router-link>
 			</div>
 
 			<h2 class="bucket-title">Bucket Details</h2>
@@ -58,111 +44,26 @@
 </template>
 
 <script>
-  import modal from '../components/modal.vue';
-
-  export default {
-    name: 'app',
-    components: {
-      modal,
-    },
-    data () {
-      return {
-        isModalVisible: false,
-        accessKey: '',
+module.exports = {
+	data: () => ({
+		accessKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
 		accessKeyShown: true,
 
-		secretKey: '',
+		secretKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
 		secretKeyShown: false,
 
-		satellite: '',
-		selected: "",
-      };
-    },
-    methods: {
-      showModal() {
-        this.isModalVisible = true;
-      },
-      closeModal() {
-        this.isModalVisible = false;
-      },
-      fetchData(){
-	     axios.get(this.baseUrl + '../../config.json').then(response => {
-	        this.satellite = response.data.Satellite;
-	        this.accessKey = response.data.AccessKey;
-	        this.secretKey = response.data.SecretKey;
-	     })
-	 },
-
-
-	  startstop: function (event) {
-            this.status(event.currentTarget.id);
-        },
-
-	 async status(status) {
-	 	
-	 	const {data} = await axios.post('config.php', {
-			status: status
-		});
-
-		if(data == "Restarting" || data == "Stopped" || data == "Conneted"){
-			document.getElementById("first").textContent = data;
-	 	}else{
-	 		data = "Stopped";
-	 		document.getElementById("first").textContent = data;
-	 	}
-
-	 	if (data == "Conneted") {
-
-	 		document.getElementById("status-red").classList.add("dnone");
-	 		document.getElementById("restart-icon").classList.add("dnone");
-	 		document.getElementById("status-light").classList.remove("dnone");
-
-	 		document.getElementById("start").classList.add("dnone");
-	 		document.getElementById("stop").classList.remove("dnone");
-
-	 		document.getElementById("restart").classList.remove("dnone");
-	 		document.getElementById("restart1").classList.add("dnone");
-	 		
-
-	 	}else if(data == "Stopped"){
-
-	 		document.getElementById("restart-icon").classList.add("dnone");
-	 		document.getElementById("status-light").classList.add("dnone");
-	 		document.getElementById("status-red").classList.remove("dnone");
-
-	 		document.getElementById("stop").classList.add("dnone");
-	 		document.getElementById("start").classList.remove("dnone");
-
-	 		document.getElementById("restart").classList.add("dnone");
-	 		document.getElementById("restart1").classList.remove("dnone");
-
-	 	}else if(data == "Restarting"){
-	 		document.getElementById("status-light").classList.add("dnone");
-	 		document.getElementById("status-red").classList.add("dnone");
-	 		document.getElementById("restart-icon").classList.remove("dnone");
-
-	 	}
-
-	 }
-
-    },
-    computed: {
+		satellite: 'us-central-1.tardigrade.io'
+	}),
+	computed: {
 		accessKeyInputType() {
 			return this.accessKeyShown ? 'text' : 'password';
 		},
 
 		secretKeyInputType() {
 			return this.secretKeyShown ? 'text' : 'password';
-		},
-
-	},
-
-	 created () {
-        // Fetch Data
-    	this.fetchData();
-    	this.status("Cheking Process");
-	 },
-  };
+		}
+	}
+};
 </script>
 
 <style scoped>
@@ -193,7 +94,7 @@
 	color: #0D1826;
 }
 
-#status-light {
+.status-light {
 	position: absolute;
 	left: 249px;
 	top: 60px;
@@ -206,41 +107,18 @@
 	background: #37FDCE;
 }
 
-#status-red {
-	position: absolute;
-	left: 249px;
-	top: 60px;
-
-	width: 12px;
-	height: 12px;
-
-	border-radius: 6px;
-
-	background: red;
-}
-
-#restart-icon{
-	position: absolute;
-    left: 249px;
-    top: 58px;
-    color: lightgray;
-}
-
 .status-text {
 	position: absolute;
-	/*left: 269px;*/
-	left: 262px;
+	left: 269px;
 	top: 58px;
 
-	width: 125px;
+	width: 84px;
 	height: 16px;
 
 	display: flex;
 	align-items: center;
 
 	color: rgba(0, 0, 0, 0.7);
-	background: white;
-    border: none;
 }
 
 .gateway-box {
@@ -457,7 +335,7 @@
 .reconfigure {
 	position: absolute;
 	left: 352px;
-	top: 52px;
+	top: 74px;
 
 	width: 127px;
 	height: 14px;
@@ -471,7 +349,6 @@
 
 	display: flex;
 	align-items: center;
-	cursor: pointer;
 }
 
 .reconfigure > * {
@@ -632,37 +509,5 @@
 	text-indent: 20px;
 
 	color: rgba(56, 75, 101, 0.75);
-}
-
-.dnone{
-	display: none;
-}
-
-.dropdown-toggle{
-	border: none;
-}
-
-.dropdown-toggle:hover{
-	background-color: white ! important;
-}
-
-.dropdown-toggle:focus{
-	background-color: white ! important;
-}
-
-.dropdown-menu{
-	top: 147%;
-    left: -24px;
-}
-
-.rs{
-	color: lightgrey;
-	cursor: not-allowed;
-}
-
-.caret{
-	position: relative;
-    left: 10px;
-    bottom: 2px;
 }
 </style>

@@ -153,25 +153,3 @@ nav .login {
 
 	color: #FFFFFF;
 }
-
-nav .home {
-	position: absolute;
-	width: 147px;
-	height: 45px;
-	/*left: 1100px;*/
-	left: 860px;
-	top: 7px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 145%;
-	/* or 20px */
-
-	display: flex;
-	align-items: center;
-	text-align: center;
-
-	color: #FFFFFF;
-}
