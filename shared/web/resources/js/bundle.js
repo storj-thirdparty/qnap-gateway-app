@@ -13428,31 +13428,61 @@ var render = function() {
           attrs: { id: "status-red" }
         }),
         _vm._v(" "),
-        _c(
-          "select",
-          {
-            staticClass: "status-text",
-            attrs: { id: "selectstatus" },
-            on: {
-              change: function($event) {
-                return _vm.changeItem($event)
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { id: "first", disabled: "" } }),
-            _vm._v(" "),
-            _c("option", { attrs: { selected: "", id: "start" } }, [
-              _vm._v("Start Gateway")
+        _c("div", { staticClass: "dropdown status-text" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("ul", { staticClass: "dropdown-menu" }, [
+            _c("li", { staticClass: "dnone", attrs: { id: "start" } }, [
+              _c(
+                "a",
+                {
+                  attrs: { id: "Start Gateway" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.startstop($event)
+                    }
+                  }
+                },
+                [_vm._v("Start Gateway")]
+              )
             ]),
             _vm._v(" "),
-            _c("option", { attrs: { id: "stop" } }, [_vm._v("Stop Gateway")]),
+            _c("li", { attrs: { id: "stop" } }, [
+              _c(
+                "a",
+                {
+                  attrs: { id: "Stop Gateway" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.startstop($event)
+                    }
+                  }
+                },
+                [_vm._v("Stop Gateway")]
+              )
+            ]),
             _vm._v(" "),
-            _c("option", { attrs: { id: "restart" } }, [
-              _vm._v("Restart Gateway")
-            ])
-          ]
-        )
+            _c("li", { attrs: { id: "restart" } }, [
+              _c(
+                "a",
+                {
+                  attrs: { id: "Restart Gateway" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.startstop($event)
+                    }
+                  }
+                },
+                [_vm._v("Restart Gateway")]
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "gateway-box" }, [
@@ -13754,7 +13784,35 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-default dropdown-toggle",
+        attrs: { type: "button", "data-toggle": "dropdown" }
+      },
+      [
+        _c("span", { attrs: { id: "first" } }, [_vm._v("Connected")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "caret" })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "dnone", attrs: { id: "restart1" } }, [
+      _c("a", { staticClass: "rs", attrs: { id: "Restart Gateway" } }, [
+        _vm._v("Restart Gateway")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -13787,6 +13845,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_modal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13876,51 +13940,56 @@ __webpack_require__.r(__webpack_exports__);
 	     })
 	 },
 
-	 changeItem: function changeItem(event) {
 
-	 		this.status(event.target.value);
-	 },
+	  startstop: function (event) {
+            this.status(event.currentTarget.id);
+        },
 
 	 async status(status) {
-	 	if (status == "Start Gateway") {
+	 	
+	 	const {data} = await axios.post('config.php', {
+			status: status
+		});
+
+		if(data == "Restarting" || data == "Stopped" || data == "Conneted"){
+			document.getElementById("first").textContent = data;
+	 	}else{
+	 		data = "Stopped";
+	 		document.getElementById("first").textContent = data;
+	 	}
+
+	 	if (data == "Conneted") {
 
 	 		document.getElementById("status-red").classList.add("dnone");
 	 		document.getElementById("restart-icon").classList.add("dnone");
 	 		document.getElementById("status-light").classList.remove("dnone");
 
-	 		document.getElementById("start").removeAttribute("enabled", "");
-	 		document.getElementById("start").setAttribute("disabled", "");
-	 		document.getElementById("stop").removeAttribute("disabled", "");
-	 		document.getElementById("stop").setAttribute("enabled", "");
-	 		document.getElementById("restart").removeAttribute("disabled", "");
-	 		document.getElementById("restart").setAttribute("enabled", "");
+	 		document.getElementById("start").classList.add("dnone");
+	 		document.getElementById("stop").classList.remove("dnone");
 
-	 	}else if(status == "Stop Gateway"){
+	 		document.getElementById("restart").classList.remove("dnone");
+	 		document.getElementById("restart1").classList.add("dnone");
+	 		
+
+	 	}else if(data == "Stopped"){
 
 	 		document.getElementById("restart-icon").classList.add("dnone");
 	 		document.getElementById("status-light").classList.add("dnone");
 	 		document.getElementById("status-red").classList.remove("dnone");
 
-	 		document.getElementById("stop").removeAttribute("enabled", "");
-	 		document.getElementById("stop").setAttribute("disabled", "");
-	 		document.getElementById("start").removeAttribute("disabled", "");
-	 		document.getElementById("start").setAttribute("enabled", "");
-	 		document.getElementById("restart").removeAttribute("disabled", "");
-	 		document.getElementById("restart").setAttribute("enabled", "");
+	 		document.getElementById("stop").classList.add("dnone");
+	 		document.getElementById("start").classList.remove("dnone");
 
-	 	}else if(status == "Restart Gateway"){
+	 		document.getElementById("restart").classList.add("dnone");
+	 		document.getElementById("restart1").classList.remove("dnone");
+
+	 	}else if(data == "Restarting"){
 	 		document.getElementById("status-light").classList.add("dnone");
 	 		document.getElementById("status-red").classList.add("dnone");
 	 		document.getElementById("restart-icon").classList.remove("dnone");
 
 	 	}
 
-	 	const {data} = await axios.post('config.php', {
-			status: status
-		});
-
-		document.getElementById("first").selected = true;
-		document.getElementById("first").textContent = data;
 	 }
 
     },
@@ -14129,7 +14198,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(14);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.modal-backdrop {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.3);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  z-index: 1000;\n}\n.modal {\n  background: #FFFFFF;\n  box-shadow: 2px 2px 20px 1px;\n  overflow-x: auto;\n  display: flex;\n  flex-direction: column;\n  width: 40%;\n}\n.modal-header,\n.modal-footer {\n  padding: 15px;\n  display: flex;\n}\n.modal-header {\n  border-bottom: 1px solid #eeeeee;\n  color: #4AAE9B;\n  justify-content: space-between;\n}\n.modal-footer {\n  border-top: 1px solid #eeeeee;\n  justify-content: space-evenly;\n}\n.modal-body {\n  position: relative;\n  padding: 20px 10px;\n}\n.btn-close {\n  border: none;\n  font-size: 20px;\n  padding: 20px;\n  cursor: pointer;\n  font-weight: bold;\n  color: #4AAE9B;\n  background: transparent;\n}\n.btn-cancel {\n  background: #FFF;\n  border: 2px solid blue;\n  border-radius: 2px;\n  width: 250px;\n  padding: 10px;\n  color: blue;\n  cursor: pointer;\n}\n.btn-yes {\n  color: white;\n  background: blue;\n  border: 2px solid blue;\n  border-radius: 2px;\n  width: 250px;\n  padding: 10px;\n  text-align: center;\n  margin-left: 10px;\n}\n.head{\n  font-size: 18px;\n  color: black;\n  font-weight: 700;\n}\n.description{\n  width: 73%;\n  margin-top: 10px;\n  color: #585757;\n}\n", ""]);
+exports.push([module.i, "\n.modal-backdrop {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.3);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  z-index: 1000;\n}\n.modal {\n  background: #FFFFFF;\n  box-shadow: 2px 2px 20px 1px;\n  overflow-x: auto;\n  display: flex;\n  flex-direction: column;\n  width: 40%;\n  border-radius: 5px;\n\n  height: 225px;\n  position: absolute;\n  left: 30%;\n  top: 35%;\n}\n.modal-header,\n.modal-footer {\n  padding: 15px;\n  display: flex;\n}\n.modal-header {\n  border-bottom: 1px solid #eeeeee;\n  color: #4AAE9B;\n  justify-content: space-between;\n}\n.modal-footer {\n  justify-content: space-evenly;\n  border-top: none;\n}\n.modal-body {\n  position: relative;\n  padding: 20px 10px;\n  padding-top: 45px;\n}\n.btn-close {\n  border: none;\n  font-size: 20px;\n  padding: 20px;\n  cursor: pointer;\n  font-weight: bold;\n  color: #4AAE9B;\n  background: transparent;\n}\n.btn-cancel {\n  background: #FFF;\n  border: 1px solid blue;\n  border-radius: 2px;\n  width: 250px;\n  padding: 10px;\n  color: blue;\n  cursor: pointer;\n  border-radius: 5px;\n  font-weight: 600;\n}\n.btn-yes {\n  color: white;\n  background: blue;\n  border: 1px solid blue;\n  border-radius: 2px;\n  width: 250px;\n  padding: 10px;\n  text-align: center;\n  margin-left: 10px;\n  border-radius: 5px;\n  font-weight: 600;\n}\n.btn-yes:focus, .btn-yes:hover {\n  color: white;\n  text-decoration: none;\n}\n.head{\n  font-size: 18px;\n  color: black;\n  font-weight: 700;\n}\n.description{\n  width: 73%;\n  margin-top: 10px;\n  color: #585757;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -14169,7 +14238,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(14);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.status-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 204px;\r\n\ttop: 120px;\r\n\r\n\twidth: 456px;\r\n\theight: 120px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.status-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 57px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n#status-light[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 249px;\r\n\ttop: 60px;\r\n\r\n\twidth: 12px;\r\n\theight: 12px;\r\n\r\n\tborder-radius: 6px;\r\n\r\n\tbackground: #37FDCE;\n}\n#status-red[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 249px;\r\n\ttop: 60px;\r\n\r\n\twidth: 12px;\r\n\theight: 12px;\r\n\r\n\tborder-radius: 6px;\r\n\r\n\tbackground: red;\n}\n#restart-icon[data-v-aae30ed8]{\r\n\tposition: absolute;\r\n    left: 249px;\r\n    top: 58px;\r\n    color: lightgray;\n}\n.status-text[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 269px;\r\n\ttop: 58px;\r\n\r\n\twidth: 125px;\r\n\theight: 16px;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: rgba(0, 0, 0, 0.7);\r\n\tbackground: white;\r\n    border: none;\n}\n.gateway-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 204px;\r\n\ttop: 274px;\r\n\r\n\twidth: 456px;\r\n\theight: 344px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.gateway-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 50px;\r\n\r\n\twidth: 298px;\r\n\theight: 18px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n.access-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 98px;\r\n\r\n\twidth: 88px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.access-key-show[data-v-aae30ed8], .access-key-hide[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 315px;\r\n\ttop: 96px;\r\n\r\n\twidth: 69px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #9BA4B2;\r\n\r\n\tcursor: pointer;\n}\n.access-key-show img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: 0px;\r\n\r\n\twidth: 20px;\n}\n.access-key-hide img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: -3px;\r\n\r\n\twidth: 20px;\n}\n.access-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\r\n\tleft: 72px;\r\n\ttop: 122px;\r\n\r\n\twidth: 312px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: \"Source Code Pro\";\r\n\tfont-style: normal;\r\n\tfont-weight: 500;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\r\n\r\n\ttext-indent: 20px;\n}\n.secret-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 202px;\r\n\r\n\twidth: 82px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.secret-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 226px;\r\n\r\n\twidth: 312px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: \"Source Code Pro\";\r\n\tfont-style: normal;\r\n\tfont-weight: 500;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\r\n\r\n\ttext-indent: 20px;\n}\n.secret-key-show[data-v-aae30ed8], .secret-key-hide[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 315px;\r\n\ttop: 201px;\r\n\r\n\twidth: 69px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #9BA4B2;\r\n\r\n\tcursor: pointer;\n}\n.secret-key-show img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: 0px;\r\n\r\n\twidth: 20px;\n}\n.secret-key-hide img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: -3px;\r\n\r\n\twidth: 20px;\n}\n.bucket-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 684px;\r\n\ttop: 120px;\r\n\r\n\twidth: 552px;\r\n\theight: 498px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.reconfigure[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 352px;\r\n\ttop: 52px;\r\n\r\n\twidth: 127px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tcursor: pointer;\n}\n.reconfigure > *[data-v-aae30ed8] {\r\n\twidth: 127px;\r\n\ttext-align: right !important;\r\n\tcolor: #2683FF !important;\n}\n.bucket-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 71px;\r\n\r\n\twidth: 298px;\r\n\theight: 18px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 18px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n.satellite-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 119px;\r\n\r\n\twidth: 61px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.satellite[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 143px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.api-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 223px;\r\n\r\n\twidth: 58px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.api-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 247px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.passphrase-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 73px;\r\n\ttop: 331px;\r\n\r\n\twidth: 174px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.passphrase[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 73px;\r\n\ttop: 355px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.dnone[data-v-aae30ed8]{\r\n\tdisplay: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.status-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 204px;\r\n\ttop: 120px;\r\n\r\n\twidth: 456px;\r\n\theight: 120px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.status-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 57px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n#status-light[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 249px;\r\n\ttop: 60px;\r\n\r\n\twidth: 12px;\r\n\theight: 12px;\r\n\r\n\tborder-radius: 6px;\r\n\r\n\tbackground: #37FDCE;\n}\n#status-red[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 249px;\r\n\ttop: 60px;\r\n\r\n\twidth: 12px;\r\n\theight: 12px;\r\n\r\n\tborder-radius: 6px;\r\n\r\n\tbackground: red;\n}\n#restart-icon[data-v-aae30ed8]{\r\n\tposition: absolute;\r\n    left: 249px;\r\n    top: 58px;\r\n    color: lightgray;\n}\n.status-text[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\t/*left: 269px;*/\r\n\tleft: 262px;\r\n\ttop: 58px;\r\n\r\n\twidth: 125px;\r\n\theight: 16px;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: rgba(0, 0, 0, 0.7);\r\n\tbackground: white;\r\n    border: none;\n}\n.gateway-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 204px;\r\n\ttop: 274px;\r\n\r\n\twidth: 456px;\r\n\theight: 344px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.gateway-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 50px;\r\n\r\n\twidth: 298px;\r\n\theight: 18px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n.access-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 98px;\r\n\r\n\twidth: 88px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.access-key-show[data-v-aae30ed8], .access-key-hide[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 315px;\r\n\ttop: 96px;\r\n\r\n\twidth: 69px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #9BA4B2;\r\n\r\n\tcursor: pointer;\n}\n.access-key-show img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: 0px;\r\n\r\n\twidth: 20px;\n}\n.access-key-hide img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: -3px;\r\n\r\n\twidth: 20px;\n}\n.access-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\r\n\tleft: 72px;\r\n\ttop: 122px;\r\n\r\n\twidth: 312px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: \"Source Code Pro\";\r\n\tfont-style: normal;\r\n\tfont-weight: 500;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\r\n\r\n\ttext-indent: 20px;\n}\n.secret-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 71px;\r\n\ttop: 202px;\r\n\r\n\twidth: 82px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.secret-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 226px;\r\n\r\n\twidth: 312px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: \"Source Code Pro\";\r\n\tfont-style: normal;\r\n\tfont-weight: 500;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\r\n\r\n\ttext-indent: 20px;\n}\n.secret-key-show[data-v-aae30ed8], .secret-key-hide[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 315px;\r\n\ttop: 201px;\r\n\r\n\twidth: 69px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #9BA4B2;\r\n\r\n\tcursor: pointer;\n}\n.secret-key-show img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: 0px;\r\n\r\n\twidth: 20px;\n}\n.secret-key-hide img[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 46px;\r\n\ttop: -3px;\r\n\r\n\twidth: 20px;\n}\n.bucket-box[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 684px;\r\n\ttop: 120px;\r\n\r\n\twidth: 552px;\r\n\theight: 498px;\r\n\r\n\tbackground: #FEFEFF;\r\n\tborder-radius: 6px;\n}\n.reconfigure[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 352px;\r\n\ttop: 52px;\r\n\r\n\twidth: 127px;\r\n\theight: 14px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 14px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 14px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\tcursor: pointer;\n}\n.reconfigure > *[data-v-aae30ed8] {\r\n\twidth: 127px;\r\n\ttext-align: right !important;\r\n\tcolor: #2683FF !important;\n}\n.bucket-title[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 71px;\r\n\r\n\twidth: 298px;\r\n\theight: 18px;\r\n\r\n\tfont-weight: bold;\r\n\tfont-size: 18px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 18px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #0D1826;\n}\n.satellite-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 119px;\r\n\r\n\twidth: 61px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.satellite[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 143px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.api-key-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 223px;\r\n\r\n\twidth: 58px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.api-key[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 72px;\r\n\ttop: 247px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.passphrase-label[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 73px;\r\n\ttop: 331px;\r\n\r\n\twidth: 174px;\r\n\theight: 16px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 100%;\r\n\t/* identical to box height, or 16px */\r\n\r\n\tdisplay: flex;\r\n\talign-items: center;\r\n\r\n\tcolor: #384B65;\n}\n.passphrase[data-v-aae30ed8] {\r\n\tposition: absolute;\r\n\tleft: 73px;\r\n\ttop: 355px;\r\n\r\n\twidth: 407px;\r\n\theight: 52px;\r\n\r\n\tbackground: rgba(226, 229, 233, 0.4);\r\n\tborder: 1px solid #E2E6E9;\r\n\tbox-sizing: border-box;\r\n\tborder-radius: 10px;\r\n\r\n\tfont-family: Inter;\r\n\tfont-style: normal;\r\n\tfont-weight: normal;\r\n\tfont-size: 16px;\r\n\tline-height: 134.09%;\r\n\r\n\ttext-indent: 20px;\r\n\r\n\tcolor: rgba(56, 75, 101, 0.75);\n}\n.dnone[data-v-aae30ed8]{\r\n\tdisplay: none;\n}\n.dropdown-toggle[data-v-aae30ed8]{\r\n\tborder: none;\n}\n.dropdown-toggle[data-v-aae30ed8]:hover{\r\n\tbackground-color: white ! important;\n}\n.dropdown-toggle[data-v-aae30ed8]:focus{\r\n\tbackground-color: white ! important;\n}\n.dropdown-menu[data-v-aae30ed8]{\r\n\ttop: 147%;\r\n    left: -24px;\n}\n.rs[data-v-aae30ed8]{\r\n\tcolor: lightgrey;\r\n\tcursor: not-allowed;\n}\n.caret[data-v-aae30ed8]{\r\n\tposition: relative;\r\n    left: 10px;\r\n    bottom: 2px;\n}\r\n", ""]);
 // Exports
 module.exports = exports;
 
