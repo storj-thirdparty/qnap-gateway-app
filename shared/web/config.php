@@ -15,6 +15,7 @@ $startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayrunsh' ;
 $configureScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayconfigure.sh' ;
 $updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayupdate.sh' ;
 $isRunning      = $scriptsBase . DIRECTORY_SEPARATOR . 'isRunning.sh' ;
+$dockerConfigFile = 'gateway/config.yaml';
 logMessage("------------------------------------------------------------------------------");
 logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($scriptsBase)");
 # ------------------------------------------------------------------------
@@ -92,8 +93,42 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     logMessage("config.php called up with isConfgigureAjax 1 ");
     $output = shell_exec("/bin/bash $configureScript $_address $_encryptionPassphrase $_server 2>&1 ");
 
+    /* Reading Access key and secret key from YAML*/
+    
+    $searchaccesskey = 'minio.access-key';
+    $searchsecretkey = 'minio.secret-key';
+
+    header('Content-Type: text/plain');
+
+    $contents = file_get_contents($dockerConfigFile);
+    $pattern = preg_quote($searchaccesskey, '/');
+    $pattern = "/^.*$pattern.*\$/m";
+
+    $pattern1 = preg_quote($searchsecretkey, '/');
+    $pattern1 = "/^.*$pattern1.*\$/m";
+
+    if(preg_match_all($pattern, $contents, $matches)){
+      $accesskey = implode("\n", $matches[0]);
+    }
+      else{
+          echo "No matches found";
+    }
+
+    if(preg_match_all($pattern1, $contents, $matches1)){
+      $secretkey = implode("\n", $matches1[0]);
+    }
+    else{
+   echo "No matches found";
+    }
+    $parts = explode(':', $accesskey);
+    $parts1 = explode(':', $secretkey);
+    $accesskey = str_replace(' ', '', $parts[1]);
+    $secretkey = str_replace(' ', '', $parts1[1]);
+
     /* Update File again with Log value as well */
     $properties['last_log'] = $output ;
+    $properties['AccessKey'] = $accesskey ;
+    $properties['SecretKey'] = $secretkey ;
     file_put_contents($file, json_encode($properties));
 
   }else if(isset($_POST['isUpdateAjax']) && ($_POST['isUpdateAjax'] == 1)){
@@ -124,13 +159,15 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
 
  //Stoping Gateway Process.
  else if(isset($_POST['isStop']) && ($_POST['isStop'] == 1)){
+   
+
 
 
  }
 
 
 
-  // checking is storagenode is running.
+  // checking if storagenode is running.
   else if(isset($_POST['isrun']) && ($_POST['isrun'] == 1)) {
     $output = shell_exec("/bin/bash $isRunning ");
     logMessage("Run status of container is $output ");
