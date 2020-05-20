@@ -9,15 +9,18 @@ CONTAINER_NAME=storjlabsgateway
 
 echo `date` " Stopping  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd="docker stop ${CONTAINER_NAME}"
+cmd="docker stop ${CONTAINER_NAME} 2>&1 "
+if [[ "x$cmd" == "x${CONTAINER_NAME}" ]]
+then
+	output="Success in stopping Tardigrade Gateway ${CONTAINER_NAME}"
+fi
 echo "$cmd" >> $LOG
-$cmd >> $LOG 2>&1 
-
-cmd="docker rm ${CONTAINER_NAME}"
-echo "$cmd" >> $LOG
-$cmd >> $LOG 2>&1 
-
-output=`docker ps -a `
-echo $output >> $LOG 
-cat <<< $output
+echo $cmd
+output=`docker rm ${CONTAINER_NAME} 2>&1 `
+if [[ "x$output" == "x${CONTAINER_NAME}" ]]
+then
+	output="Success in removing Tardigrade Gateway ${CONTAINER_NAME} "
+fi
+echo $output >> $LOG
+echo $output
 
