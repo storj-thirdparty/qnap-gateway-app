@@ -3,11 +3,10 @@
 		<div class="status-box">
 			<h2 class="status-title">Status</h2>
 
-			<!-- <p class="status-text">Connected</p> -->
-
 			<div class="dropdown status-dropdown">
+				<div class="status-light"></div>
 			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			    <div class="status-light"></div>Connected
+			    Connected
 			  </a>
 			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 			    <a class="dropdown-item" href="#">Stop Gateway</a>
