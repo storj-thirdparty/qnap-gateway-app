@@ -48,6 +48,9 @@
 .status-light-stopped {
 	background: #FC4545;
 }
+.status-light-reconnecting {
+	background: #989899;
+}
 
 .status-dropdown {
 	position: absolute;
