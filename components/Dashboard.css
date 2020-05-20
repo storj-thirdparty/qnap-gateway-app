@@ -42,6 +42,13 @@
 	margin-right: 12px;
 }
 
+.status-light-connected {
+	background: #37FDCE;
+}
+.status-light-stopped {
+	background: #FC4545;
+}
+
 .status-dropdown {
 	position: absolute;
 	top: 48px;

@@ -4,7 +4,7 @@
 			<h2 class="status-title">Status</h2>
 
 			<div class="dropdown status-dropdown">
-				<div class="status-light"></div>
+				<div class="status-light status-light-connected"></div>
 			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    Connected
 			  </a>
