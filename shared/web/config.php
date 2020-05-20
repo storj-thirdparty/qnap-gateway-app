@@ -11,8 +11,9 @@ $scriptsBase    = $moduleBase . '/scripts' ;
 
 
 $file           = $moduleBase  . DIRECTORY_SEPARATOR . $filename  ;
-$startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayrunsh' ;
+$startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayrun.sh' ;
 $configureScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayconfigure.sh' ;
+$stopScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewaystop.sh' ;
 $updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayupdate.sh' ;
 $isRunning      = $scriptsBase . DIRECTORY_SEPARATOR . 'isRunning.sh' ;
 $dockerConfigFile = 'gateway/config.yaml';
@@ -46,32 +47,25 @@ if(isset($data['apiKey']) && isset($data['passphrase']) && isset($data['satellit
   }
 
 
-if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
-    logMessage("config.php called up with isStartajax 1 ");
+// Run Gateway
+if(isset($_POST['isRun']) && ($_POST['isRun'] == 1)) {
+    logMessage("config.php called up with isRun (for Running gateway) 1 ");
     logEnvironment() ;
-
-
-    $_address  = $_POST["address"];
-    $_server   = $_POST["server"];
-    $_api  = $_POST["api"];
-    $_satellite      = $_POST["satellite"];
-    $_encryptionPassphrase = $_POST['encryptionPassphrase'];
    
-    //Changing permissions of the shell script
-    shell_exec("chmod 777 $startScript 2>&1");
-    shell_exec("chmod 777 $stopScript 2>&1");
-    
-
-    $output = shell_exec("/bin/bash $startScript $_address $_encryptionPassphrase $_server  2>&1 ");
+    $output = shell_exec("/bin/bash $startScript 2>&1 ");
 
     $jsonString = file_get_contents($file);
     $data = json_decode($jsonString, true);
     $data['last_log'] = $output;
     $newJsonString = json_encode($data);
     file_put_contents($file, $newJsonString);
+    echo $output;
 
 
-  }else if(isset($_POST['isConfig']) && ($_POST['isConfig'] == 1)){
+  }
+
+  // Configure Geteway
+  else if(isset($_POST['isConfig']) && ($_POST['isConfig'] == 1)){
 
     $_address  = $_POST["address"];
     $_server   = $_POST["server"];
@@ -83,6 +77,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
       'Port'  => $_address,
       'Server Address'  => $_server,
       'APIKey'=> $_api,
+      'Passphrase' =>  $_encryptionPassphrase,
       'Satellite' => $_satellite,
       );
     file_put_contents($file, json_encode($properties));
@@ -91,7 +86,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     $properties = json_decode($content, true);
 
     logMessage("config.php called up with isConfgigureAjax 1 ");
-    $output = shell_exec("/bin/bash $configureScript $_address $_encryptionPassphrase $_server 2>&1 ");
+    $output = shell_exec("/bin/bash $configureScript $_address $_satellite $_api $_encryptionPassphrase 2>&1 ");
 
     /* Reading Access key and secret key from YAML*/
     
@@ -100,12 +95,14 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
 
     header('Content-Type: text/plain');
 
-    $contents = file_get_contents($dockerConfigFile);
+    $contents = shell_exec('export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin ; docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 /root/.local/share/storj/gateway/config.yaml 2>&1 ');
+
+
     $pattern = preg_quote($searchaccesskey, '/');
-    $pattern = "/^.*$pattern.*\$/m";
+    $pattern = "/^\s*${pattern}\s*:.*\$/m";
 
     $pattern1 = preg_quote($searchsecretkey, '/');
-    $pattern1 = "/^.*$pattern1.*\$/m";
+    $pattern1 = "/^\s*${pattern1}\s*:.*\$/m";
 
     if(preg_match_all($pattern, $contents, $matches)){
       $accesskey = implode("\n", $matches[0]);
@@ -131,7 +128,11 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     $properties['SecretKey'] = $secretkey ;
     file_put_contents($file, json_encode($properties));
 
-  }else if(isset($_POST['isUpdateAjax']) && ($_POST['isUpdateAjax'] == 1)){
+  }
+
+
+  // Update Gateway
+  else if(isset($_POST['isUpdateAjax']) && ($_POST['isUpdateAjax'] == 1)){
     $content = file_get_contents($file);
     $properties = json_decode($content, true);
 
@@ -144,35 +145,32 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
     $properties['last_log'] = $output ;
     file_put_contents($file, json_encode($properties));
 
-  } else if(isset($_POST['isstartajax']) && ($_POST['isstartajax'] == 1)) {
-    logMessage("config called up with isstartajax 1 ");
-    $content = file_get_contents($file);
-    $prop = json_decode($content, true);
-    $output = "<br><b>LATEST LOG :</b> <br><code>" . $prop['last_log'] . "</code>";
-    $output = preg_replace('/\n/m', '<br>', $output);
-    if (!trim($output) == "") {
-  echo $output;
-    } else {
-  echo $output;
-    }
- }
+  } 
 
- //Stoping Gateway Process.
+ // Stop Gateway
  else if(isset($_POST['isStop']) && ($_POST['isStop'] == 1)){
    
+   // Excute shell script for stoping gateway process
+   logMessage("config.php called up with isStopAjax 1 ");
+    logEnvironment() ;
+   
+    $output = shell_exec("/bin/bash $stopScript 2>&1 ");
 
-
+    $jsonString = file_get_contents($file);
+    $data = json_decode($jsonString, true);
+    $data['last_log'] = $output;
+    $newJsonString = json_encode($data);
+    file_put_contents($file, $newJsonString);
+    echo $output;
 
  }
 
 
-
-  // checking if storagenode is running.
-  else if(isset($_POST['isrun']) && ($_POST['isrun'] == 1)) {
+  // Check Geteway Process
+  else if(isset($_POST['checkProcess']) && ($_POST['checkProcess'] == 1)) {
     $output = shell_exec("/bin/bash $isRunning ");
     logMessage("Run status of container is $output ");
-    echo $output ;
-    // echo 0 ;
+    echo $output;
   }
 
 
@@ -204,7 +202,7 @@ if(isset($_POST['isajax']) && ($_POST['isajax'] == 1)) {
 
 
       if($prop['Port'] == "" && $prop['Port'] == null && $prop['Server Address'] == "" && $prop['Server Address'] == null && $prop['APIKey'] == "" && $prop['APIKey'] == null && $prop['Satellite'] == "" && $prop['Satellite'] == null && $prop['EncryptionPassphrase'] == "" && $prop['EncryptionPassphrase'] == null  && $prop['AccessKey'] == "" && $prop['SecretKey'] == null && $prop['AccessKey'] == null && $prop['SecretKey'] == ""){
-      echo "<script>location.href = 'wizard.html';</script>";
+      //echo "<script>location.href = 'wizard.html';</script>";
     }
   }
 
@@ -226,44 +224,21 @@ code {
     <div class="row">
       <?php include 'menu.php'; ?>
           <?php
-  // TODO: REMOVE this once this works OK
           if ( $output ){
           } else {
-
-            $rootBase ="";
-
-            $file1 = "${rootBase}/storagenode/ca.cert";
-            $file2 = "${rootBase}/storagenode/ca.key";
-            $file3 = "${rootBase}/storagenode/identity.cert";
-            $file4 = "${rootBase}/storagenode/identity.key";
-            $numFiles = `ls ${rootBase}/storagenode | wc -l ` ;
-            $numFiles = (int) $numFiles ;
-
-             if(
-              ($numFiles == 6) and 
-              file_exists($file1) and
-              file_exists($file2) and
-              file_exists($file3) and
-              file_exists($file4)
-              ) 
-             {
-                 echo "<span id='file_exists' style='display:none;'>0</span>";
-              }else{
-                  echo "<span id='file_exists' style='display:none;'>1</span>";
-                }
 
           ?>
           <div class="col-10 config-page">
             <div class="container-fluid">
               <h2>Setup</h2>
-              <a href="https://documentation.storj.io/" target="_blank"><p class="header-link">Documentation ></p></a>
+              <a href="https://documentation.tardigrade.io/api-reference/s3-gateway" target="_blank"><p class="header-link">Documentation ></p></a>
                  
                 <!-- <div style="display:none" id="storjrows"> -->
                 <div class="row segment">
                   <div class="column col-md-2"><div class="segment-icon port-icon"></div></div>
                   <div class="column col-md-10 segment-content">
                     <h4 class="segment-title">Port Forwarding</h4>
-                    <p class="segment-msg">Test</p>
+                    <p class="segment-msg">Port that will be used to run the endpoint</p>
                     <span id="externalAddressval"></span><span style="display:none;" id="editexternalAddressbtn"><button class="segment-btn editbtn" data-toggle="modal" data-target="#externalAddress">
                       Edit External Address
                     </button></span>
@@ -298,7 +273,7 @@ code {
                   <div class="column col-md-2"><div class="segment-icon wallet-icon"></div></div>
                   <div class="column col-md-10 segment-content">
                     <h4 class="segment-title">Server Address</h4>
-                    <p class="segment-msg">Test</p>
+                    <p class="segment-msg">Address to serve S3 api over</p>
                     <span id="wallettbtnval"></span><span style="display:none;" id="editwallettbtn"><button class="segment-btn editbtn" data-toggle="modal" data-target="#walletAddress">
                         Edit Server Address
                       </button></span>
@@ -333,7 +308,7 @@ code {
                   <div class="column col-md-2"><div class="segment-icon storage-icon"></div></div>
                   <div class="column col-md-10 segment-content">
                     <h4 class="segment-title">API Key</h4>
-                    <p class="segment-msg">Test</p>
+                    <p class="segment-msg">Enter the API key you generated</p>
                     <span id="storagebtnval"></span><span style="display:none;" id="editstoragebtn"><button class="segment-btn editbtn" data-toggle="modal" data-target="#storageAllocation">
                       Edit API Key
                     </button></span>
@@ -370,7 +345,7 @@ code {
                   <div class="column col-md-2"><div class="segment-icon email-icon"></div></div>
                   <div class="column col-md-10 segment-content">
                     <h4 class="segment-title">Satellite</h4>
-                    <p class="segment-msg">Test</p>
+                    <p class="segment-msg">Enter the satellite address corresponding to the satellite you've created your account on</p>
                     <span id="emailAddressval"></span><span style="display:none;" id="editemailAddressbtn"><button class="segment-btn editbtn" data-toggle="modal" data-target="#emailAddress">
                       Edit Satellite
                     </button></span>
@@ -405,7 +380,7 @@ code {
                   <div class="column col-md-2"><div class="segment-icon directory-icon"></div></div>
                   <div class="column col-md-10 segment-content">
                     <h4 class="segment-title">Encryption Passphrase</h4>
-                    <p class="segment-msg">Test</p>
+                    <p class="segment-msg">Create and confirm an encryption passphrase, which is used to encrypt your files before they are uploaded</p>
                       <span id="directorybtnval" cl></span><span style="display:none;" id="editdirectorybtn"><button class="segment-btn editbtn" data-toggle="modal" data-target="#directory">
                       Edit Encryption Passphrase
                     </button></span>
@@ -453,8 +428,12 @@ code {
           <?php }
         } ?>
   </div>
+
+  <p id="last_log" style="display: none;"><?php if(isset($prop['last_log'])) echo $prop['last_log'] ?></p>
+
 <?php include 'footer.php';?>
 <script type="text/javascript" src="./resources/js/config.js"></script>
+
 <?php
 
 }
@@ -471,7 +450,7 @@ function logEnvironment() {
 
 function logMessage($message) {
     $file = "/var/log/GATEWAY" ;
-     // $file = "test" ;
+    // $file = "test" ;
     $message = preg_replace('/\n$/', '', $message);
     $date = `date` ; $timestamp = str_replace("\n", " ", $date);
     file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);

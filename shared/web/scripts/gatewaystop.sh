@@ -9,11 +9,11 @@ CONTAINER_NAME=storjlabsgateway
 
 echo `date` " Stopping  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd= "docker stop ${CONTAINER_NAME}"
+cmd="docker stop ${CONTAINER_NAME}"
 echo "$cmd" >> $LOG
 $cmd >> $LOG 2>&1 
 
-cmd= "docker rm ${CONTAINER_NAME}"
+cmd="docker rm ${CONTAINER_NAME}"
 echo "$cmd" >> $LOG
 $cmd >> $LOG 2>&1 
 
