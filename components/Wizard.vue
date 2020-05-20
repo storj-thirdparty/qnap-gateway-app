@@ -43,7 +43,7 @@
 				<label class="passphrase-label">Encryption Passphrase</label>
 				<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
 
-				<button class="continue" v-on:click="step++">Continue</button>
+				<button class="continue" v-on:click="step++" v-bind:disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
 			</div>
 		</div>
 
@@ -89,6 +89,8 @@
 	</div>
 </template>
 
+<style src="./Wizard.css" scoped></style>
+
 <script>
 module.exports = {
 	data: () => ({
@@ -97,6 +99,14 @@ module.exports = {
 		satellite: 'us-central-1.tardigrade.io',
 		apiKey: '',
 		passphrase: ''
-	})
+	}),
+	computed: {
+		isApiKeyValid() {
+			return this.apiKey !== '';
+		},
+		isPassphraseValid() {
+			return this.passphrase !== '';
+		}
+	}
 };
 </script>
