@@ -55,7 +55,7 @@
 				</div>
 
 				<h1 class="title">Save Your Keys</h1>
-				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You’ll need both later for configuring HSB 3 to backup your QNAP.</p>
+				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
 
 				<label class="access-key-label">Access Key</label>
 				<input type="text" class="access-key" value="35EzMZowEWjh9BJAv5okf2Sif9YV"></label>
