@@ -73,6 +73,10 @@
 	color: #000000;
 }
 
+.dropdown-item.disabled {
+	color: rgba(0, 0, 0, 0.3);
+}
+
 .status-dropdown .dropdown-item:focus, .status-dropdown .dropdown-item:hover {
     color: #FFF;
     background-color: #2683FF;
