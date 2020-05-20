@@ -14,6 +14,19 @@
 			  </div>
 			</div>
 
+			<!-- Example of status when gateway is stopped -->
+
+			<!-- <div class="dropdown status-dropdown">
+				<div class="status-light status-light-stopped"></div>
+			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    Stopped
+			  </a>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+			    <a class="dropdown-item" href="#">Start Gateway</a>
+			    <a class="dropdown-item disabled" href="#">Restart Gateway</a>
+			  </div>
+			</div> -->
+
 		</div>
 
 		<div class="gateway-box">
