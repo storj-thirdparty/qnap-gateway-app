@@ -67,6 +67,29 @@
 
 				<button class="continue" v-on:click="step++">Continue</button>
 			</div>
+
+			 <div class="toast-wrapper">
+				<div id="access-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+				  <div class="toast-header">
+				    <img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
+				    <p class="toast-title mr-auto">Access Key Copied to Clipboard</p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+				  </div>
+				</div>
+
+				<div id="secret-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+					<div class="toast-header">
+						<img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
+						<p class="toast-title mr-auto">Secret Key Copied to Clipboard</p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="step step-3" v-if="step === 3">
@@ -86,6 +109,7 @@
 
 				<a href="/" class="done">Done</a>
 			</div>
+
 		</div>
 	</div>
 </template>
