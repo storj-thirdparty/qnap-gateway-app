@@ -48,7 +48,7 @@
 .status-light-stopped {
 	background: #FC4545;
 }
-.status-light-reconnecting {
+.status-light-restarting {
 	background: #989899;
 }
 
