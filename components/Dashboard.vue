@@ -61,7 +61,31 @@
 
 		<div class="bucket-box">
 			<div class="reconfigure">
-				<router-link to="/wizard">Reconfigure</router-link>
+				<a href="" data-toggle="modal" data-target="#reconfigureModal">Reconfigure</a>
+			</div>
+
+			<!-- Reconfigure Modal -->
+			<div class="modal fade" id="reconfigureModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title mx-auto" id="staticBackdropLabel">Are You Sure?</h5>
+			      </div>
+			      <div class="modal-body">
+			        <p>Reconfiguring will reset Tardigrade S3 Gateway. Your information here will be removed, but this will not delete data already backed up to Tardigrade.</p>
+			      </div>
+			      <div class="modal-footer">
+							<div class="row">
+								<div class="col-6">
+									<button type="button" class="btn btn-lg btn-outline-primary btn-block" data-dismiss="modal">Cancel</button>
+								</div>
+								<div class="col-6">
+									<button type="button" class="btn btn-lg btn-primary btn-block">Yes, Reconfigure</button>
+								</div>
+							</div>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 
 			<h2 class="bucket-title">Bucket Details</h2>
