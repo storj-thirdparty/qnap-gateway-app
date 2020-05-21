@@ -33,7 +33,9 @@
 			<!-- Example of status when gateway is restarting -->
 
 			<!-- <div class="dropdown status-dropdown status-restarting">
-				<div class="status-light status-light-restarting"></div>
+				<div class="status-light status-light-restarting">
+					<img src="resources/img/icon-restarting.svg" alt="Restarting icon" class="icon-restarting">
+				</div>
 			  <a class="dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    Restarting...
 			  </a>
