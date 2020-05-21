@@ -336,6 +336,53 @@
 	color: #2683FF !important;
 }
 
+.modal-header {
+	border-bottom: 0;
+}
+.modal-title {
+	font-family: Inter;
+	font-weight: bold;
+	text-align: center;
+	color: #0D1826;
+	margin-top: 0.5em;
+}
+.modal-body {
+	padding: 0.5em 2em 0;
+}
+.modal-body p {
+	font-family: Inter;
+	text-align: center;
+	color: #384B65;
+}
+.modal-footer {
+	border-top: 0;
+	padding: 1em 0;
+}
+.modal-footer .row {
+	width: 100%;
+}
+.modal-footer .btn {
+	font-family: Inter;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 16px;
+}
+.btn-primary {
+	background-color: #2683FF;
+	border: 2px solid #2683FF;
+}
+.btn-primary:hover {
+	background-color: #0059D0;
+	border-color: #0059D0;
+}
+.btn-outline-primary {
+	border: 2px solid #2683FF;
+}
+.btn-outline-primary:hover {
+	border-color: #0059D0;
+	background-color: #0059D0;
+}
+
 .bucket-title {
 	position: absolute;
 	left: 72px;
