@@ -3,6 +3,8 @@
 		<div class="status-box">
 			<h2 class="status-title">Status</h2>
 
+			<!-- Status when gateway is connected -->
+
 			<div class="dropdown status-dropdown">
 				<div class="status-light status-light-connected"></div>
 			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -25,6 +27,16 @@
 			    <a class="dropdown-item" href="#">Start Gateway</a>
 			    <a class="dropdown-item disabled" href="#">Restart Gateway</a>
 			  </div>
+			</div> -->
+
+
+			<!-- Example of status when gateway is restarting -->
+
+			<!-- <div class="dropdown status-dropdown status-restarting">
+				<div class="status-light status-light-restarting"></div>
+			  <a class="dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    Restarting...
+			  </a>
 			</div> -->
 
 		</div>
