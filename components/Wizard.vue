@@ -45,6 +45,22 @@
 
 				<button class="continue" v-on:click="step++" v-bind:disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
 			</div>
+
+			<div class="toast-wrapper">
+				<div id="api-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+				  <div class="toast-header">
+				    <img src="resources/img/icon-error.svg" class="rounded mr-2" alt="Error icon">
+				    <p class="toast-title mr-auto">API Key/Passphrase Failed. </p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+				  </div>
+					<div class="toast-body">
+						<p>Sign in to your selected Satellite at Tardigrade.io to verify your bucket details and retry.</p>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="step step-2" v-if="step === 2">
@@ -68,7 +84,7 @@
 				<button class="continue" v-on:click="step++">Continue</button>
 			</div>
 
-			 <div class="toast-wrapper">
+			<div class="toast-wrapper">
 				<div id="access-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
 				  <div class="toast-header">
 				    <img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
