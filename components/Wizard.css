@@ -787,4 +787,7 @@ button:disabled {
 	font-size: 16px;
 	text-align: center;
 	color: #2683FF;
+	position: absolute;
+  top: 555px;
+  left: 448px;
 }
