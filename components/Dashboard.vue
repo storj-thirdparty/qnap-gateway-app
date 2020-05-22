@@ -135,33 +135,42 @@ export default {
 			await callEndpoint('gateway-action', {
 				action: 'stop'
 			});
+
+			await this.getDashboardInfo();
 		},
 		async start() {
 			await callEndpoint('gateway-action', {
 				action: 'start'
 			});
+
+			await this.getDashboardInfo();
 		},
 		async restart() {
 			await callEndpoint('gateway-action', {
 				action: 'restart'
 			});
+
+			await this.getDashboardInfo();
+		},
+		async getDashboardInfo() {
+			const {
+				accessKey,
+				secretKey,
+				satellite,
+				status
+			} = await callEndpoint('dashboard-info');
+
+			this.accessKey = accessKey;
+			this.secretKey = secretKey;
+			this.satellite = satellite;
+
+			if(typeof status === 'string') {
+				this.status = status;
+			}
 		}
 	},
 	async created() {
-		const {
-			accessKey,
-			secretKey,
-			satellite,
-			status
-		} = await callEndpoint('dashboard-info');
-
-		this.accessKey = accessKey;
-		this.secretKey = secretKey;
-		this.satellite = satellite;
-
-		if(typeof status === 'string') {
-			this.status = status;
-		}
+		await this.getDashboardInfo();
 	}
 };
 </script>
