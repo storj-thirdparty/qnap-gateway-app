@@ -15,7 +15,7 @@ opkg install git
 Cloning the repository.
 
 ```bash
-$ git clone https://ninad458@bitbucket.org/utropicmedia/storj-node-qnap.git
+$ git clone https://github.com/storj/qnap-gateway-app
 $ cd storj-node-qnap
 ```
 
