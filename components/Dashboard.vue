@@ -5,41 +5,41 @@
 
 			<!-- Status when gateway is connected -->
 
-			<div class="dropdown status-dropdown">
+			<div class="dropdown status-dropdown" v-if="status === 'connected'">
 				<div class="status-light status-light-connected"></div>
 			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    Connected
 			  </a>
 			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-			    <a class="dropdown-item" href="#">Stop Gateway</a>
-			    <a class="dropdown-item" href="#">Restart Gateway</a>
+			    <a class="dropdown-item" href="#" v-on:click="stop">Stop Gateway</a>
+			    <a class="dropdown-item" href="#" v-on:click="restart">Restart Gateway</a>
 			  </div>
 			</div>
 
 			<!-- Example of status when gateway is stopped -->
 
-			<!-- <div class="dropdown status-dropdown">
+			<div class="dropdown status-dropdown" v-if="status === 'stopped'">
 				<div class="status-light status-light-stopped"></div>
 			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    Stopped
 			  </a>
 			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-			    <a class="dropdown-item" href="#">Start Gateway</a>
+			    <a class="dropdown-item" href="#" v-on:click="start">Start Gateway</a>
 			    <a class="dropdown-item disabled" href="#">Restart Gateway</a>
 			  </div>
-			</div> -->
+			</div>
 
 
 			<!-- Example of status when gateway is restarting -->
 
-			<!-- <div class="dropdown status-dropdown status-restarting">
+			<div class="dropdown status-dropdown status-restarting" v-if="status === 'restarting'">
 				<div class="status-light status-light-restarting">
 					<img src="resources/img/icon-restarting.svg" alt="Restarting icon" class="icon-restarting">
 				</div>
 			  <a class="dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    Restarting...
 			  </a>
-			</div> -->
+			</div>
 
 		</div>
 
@@ -107,15 +107,19 @@
 <style src="./Dashboard.css" scoped></style>
 
 <script>
-module.exports = {
+import callEndpoint from './callEndpoint';
+
+export default {
 	data: () => ({
-		accessKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+		status: 'connected',
+
+		accessKey: '',
 		accessKeyShown: true,
 
-		secretKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+		secretKey: '',
 		secretKeyShown: false,
 
-		satellite: 'us-central-1.tardigrade.io'
+		satellite: ''
 	}),
 	computed: {
 		accessKeyInputType() {
@@ -124,6 +128,39 @@ module.exports = {
 
 		secretKeyInputType() {
 			return this.secretKeyShown ? 'text' : 'password';
+		}
+	},
+	methods: {
+		async stop() {
+			await callEndpoint('gateway-action', {
+				action: 'stop'
+			});
+		},
+		async start() {
+			await callEndpoint('gateway-action', {
+				action: 'start'
+			});
+		},
+		async restart() {
+			await callEndpoint('gateway-action', {
+				action: 'restart'
+			});
+		}
+	},
+	async created() {
+		const {
+			accessKey,
+			secretKey,
+			satellite,
+			status
+		} = await callEndpoint('dashboard-info');
+
+		this.accessKey = accessKey;
+		this.secretKey = secretKey;
+		this.satellite = satellite;
+
+		if(typeof status === 'string') {
+			this.status = status;
 		}
 	}
 };

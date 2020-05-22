@@ -123,7 +123,7 @@
 
 				<button class="guide">Configuration Guide</button>
 
-				<a href="/" class="done">Done</a>
+				<a class="done" v-on:click="save">Done</a>
 			</div>
 
 		</div>
@@ -133,7 +133,9 @@
 <style src="./Wizard.css" scoped></style>
 
 <script>
-module.exports = {
+import callEndpoint from './callEndpoint';
+
+export default {
 	data: () => ({
 		step: 1,
 
@@ -147,6 +149,17 @@ module.exports = {
 		},
 		isPassphraseValid() {
 			return this.passphrase !== '';
+		}
+	},
+	methods: {
+		async save() {
+			await callEndpoint('wizard-save', {
+				satellite: this.satellite,
+				apiKey: this.apiKey,
+				passphrase: this.passphrase
+			});
+
+			this.$router.push({ path: '/' });
 		}
 	}
 };
