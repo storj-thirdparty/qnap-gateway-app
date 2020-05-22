@@ -5,10 +5,18 @@
 	$jsondata = ReadJSON($file);
 
 	// Endpoint to return the dashboard info to wizard
+	if(!array_key_exists('apiRequest', $data))  {
+	    // Do error Handling and return
+	    return ;
+	} else {
+	   // API Request can be any of 
+	   // 1) dashboard-info
+	   // 2) 
+           $apiRequest = $data['apiRequest'];
+	}
 	
-	if (isset($_GET['dashboard-info'])) {
+	if ($apiRequest === 'dashboard-info') {
 		$arr = array ( 
-      
 		        "accessKey" => $jsondata['AccessKey'], 
 		        "secretKey" => $jsondata['SecretKey'],
 		        "satellite" => $jsondata['Satellite'],
@@ -16,23 +24,26 @@
   
 		echo json_encode($arr); 
 	}
-
 	// Endpoint to save the parameters and configuring the gateway
-	else if (isset($_GET['wizard-save'])) {
-		if($data['satellite'] == "" || $data['satellite'] == null || $data['apiKey'] == "" || $data['apiKey'] ==null || $data['passphrase'] =="" || $data['passphrase'] ==null){
+	else if ($apiRequest === 'wizard-save') {
+		if(
+		    $data['satellite'] == null  || $data['satellite'] == "" ||
+		    $data['apiKey'] == null     || $data['apiKey'] == "" ||
+		    $data['passphrase'] == null || $data['passphrase'] =="" )
+		{
+
 		    $arr = array ( "Error" => "Kindly check inputs vlues!"); 
 			echo json_encode($arr); 
 		}else{
-			$satellite = $data['satellite'];
-		   	$apiKey = $data['apiKey'];
+		    $satellite = $data['satellite'];
+		    $apiKey = $data['apiKey'];
 		    $passphrase = $data['passphrase'];
 		}
 	}
 
 	// Endpoint to send commands to gateway
-
-	else if (isset($_GET['gateway-action'])) {
-		if($data['action'] == "" || $data['action'] == null){
+	else if ( $apiRequest === 'gateway-action') {
+		if($data['action'] == null || $data['action'] == "" ) {
 			$arr = array ( "error" => "Kindly check action!"); 
 			
 		}else{
