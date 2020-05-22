@@ -1,0 +1,102 @@
+body {
+	background: rgb(240, 242, 244);
+	font-family: "Inter";
+}
+
+.screen {
+	position: relative;
+	width: 1440px;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+nav {
+	position: absolute;
+	width: 1440px;
+	height: 60px;
+
+	width: 100%;
+
+	background: #0C2546;
+}
+
+nav .tardigrade {
+	position: absolute;
+	left: 30px;
+	top: 21px;
+
+	width: 122.73px;
+	height: 19.01px;
+}
+
+nav .spacer {
+	position: absolute;
+	width: 0;
+	height: 20px;
+	left: 161px;
+	top: 20px;
+
+	border: 0.5px solid #FFFFFF;
+}
+
+nav .gateway {
+	position: absolute;
+	width: 82px;
+	height: 23px;
+	left: 169px;
+	top: 17px;
+
+	font-family: Inter;
+	font-style: normal;
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 23px;
+	/* identical to box height, or 164% */
+
+	letter-spacing: 0.25px;
+
+	color: #FFFFFF;
+}
+
+nav .docs {
+	position: absolute;
+	width: 147px;
+	height: 45px;
+	left: 1100px;
+	top: 7px;
+
+	font-family: Inter;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 145%;
+	/* or 20px */
+
+	display: flex;
+	align-items: center;
+	text-align: center;
+
+	color: #FFFFFF;
+}
+
+nav .login {
+	position: absolute;
+	width: 147px;
+	height: 45px;
+	left: 1263px;
+	top: 7px;
+
+	font-family: Inter;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 145%;
+	/* or 20px */
+
+	display: flex;
+	align-items: center;
+	text-align: right;
+
+	color: #FFFFFF;
+}

@@ -15,8 +15,18 @@ opkg install git
 Cloning the repository.
 
 ```bash
-$ git clone https://ninad458@bitbucket.org/utropicmedia/storj-node-qnap.git
+$ git clone https://github.com/storj/qnap-gateway-app
 $ cd storj-node-qnap
+```
+
+Build the front end (requires node js)
+
+``` bash
+$ npm install
+$ npm run build
+```
+
+``` bash
 $ qbuild
 ```
 The qpkg file is found at [storj-node-qnap/build](storj-node-qnap/build)
@@ -44,7 +54,7 @@ Actions can be fired from system("/etc/init.d/STORJ.sh <your-command>") in php s
 
 Actions that should be executed pre and post the installation of the app is written in package_routines.
 
-storj-node-qnap/shared/file_exists.sh will give you if the identity files are generated or not. 
+storj-node-qnap/shared/file_exists.sh will give you if the identity files are generated or not.
 
 The entry point of the app is index.php. Based on the output of file_exists.sh, the page is redirected to either authorization.php or dashboard.php.
 

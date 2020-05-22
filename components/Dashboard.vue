@@ -2,8 +2,45 @@
 	<div class="screen">
 		<div class="status-box">
 			<h2 class="status-title">Status</h2>
-			<div class="status-light"></div>
-			<p class="status-text">Connected</p>
+
+			<!-- Status when gateway is connected -->
+
+			<div class="dropdown status-dropdown" v-if="status === 'connected'">
+				<div class="status-light status-light-connected"></div>
+			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    Connected
+			  </a>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+			    <a class="dropdown-item" href="#" v-on:click="stop">Stop Gateway</a>
+			    <a class="dropdown-item" href="#" v-on:click="restart">Restart Gateway</a>
+			  </div>
+			</div>
+
+			<!-- Example of status when gateway is stopped -->
+
+			<div class="dropdown status-dropdown" v-if="status === 'stopped'">
+				<div class="status-light status-light-stopped"></div>
+			  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    Stopped
+			  </a>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+			    <a class="dropdown-item" href="#" v-on:click="start">Start Gateway</a>
+			    <a class="dropdown-item disabled" href="#">Restart Gateway</a>
+			  </div>
+			</div>
+
+
+			<!-- Example of status when gateway is restarting -->
+
+			<div class="dropdown status-dropdown status-restarting" v-if="status === 'restarting'">
+				<div class="status-light status-light-restarting">
+					<img src="resources/img/icon-restarting.svg" alt="Restarting icon" class="icon-restarting">
+				</div>
+			  <a class="dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    Restarting...
+			  </a>
+			</div>
+
 		</div>
 
 		<div class="gateway-box">
@@ -26,7 +63,31 @@
 
 		<div class="bucket-box">
 			<div class="reconfigure">
-				<router-link to="/wizard">Reconfigure</router-link>
+				<a href="" data-toggle="modal" data-target="#reconfigureModal">Reconfigure</a>
+			</div>
+
+			<!-- Reconfigure Modal -->
+			<div class="modal fade" id="reconfigureModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title mx-auto" id="staticBackdropLabel">Are You Sure?</h5>
+			      </div>
+			      <div class="modal-body">
+			        <p>Reconfiguring will reset Tardigrade S3 Gateway. Your information here will be removed, but this will not delete data already backed up to Tardigrade.</p>
+			      </div>
+			      <div class="modal-footer">
+							<div class="row">
+								<div class="col-6">
+									<button type="button" class="btn btn-lg btn-outline-primary btn-block" data-dismiss="modal">Cancel</button>
+								</div>
+								<div class="col-6">
+									<button type="button" class="btn btn-lg btn-primary btn-block">Yes, Reconfigure</button>
+								</div>
+							</div>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 
 			<h2 class="bucket-title">Bucket Details</h2>
@@ -43,16 +104,22 @@
 	</div>
 </template>
 
+<style src="./Dashboard.css" scoped></style>
+
 <script>
-module.exports = {
+import callEndpoint from './callEndpoint';
+
+export default {
 	data: () => ({
-		accessKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+		status: 'connected',
+
+		accessKey: '',
 		accessKeyShown: true,
 
-		secretKey: '2sHDQ6n8rPLuhBve8aaWrR3Grq55',
+		secretKey: '',
 		secretKeyShown: false,
 
-		satellite: 'us-central-1.tardigrade.io'
+		satellite: ''
 	}),
 	computed: {
 		accessKeyInputType() {
@@ -62,452 +129,48 @@ module.exports = {
 		secretKeyInputType() {
 			return this.secretKeyShown ? 'text' : 'password';
 		}
+	},
+	methods: {
+		async stop() {
+			await callEndpoint('gateway-action', {
+				action: 'stop'
+			});
+
+			await this.getDashboardInfo();
+		},
+		async start() {
+			await callEndpoint('gateway-action', {
+				action: 'start'
+			});
+
+			await this.getDashboardInfo();
+		},
+		async restart() {
+			await callEndpoint('gateway-action', {
+				action: 'restart'
+			});
+
+			await this.getDashboardInfo();
+		},
+		async getDashboardInfo() {
+			const {
+				accessKey,
+				secretKey,
+				satellite,
+				status
+			} = await callEndpoint('dashboard-info');
+
+			this.accessKey = accessKey;
+			this.secretKey = secretKey;
+			this.satellite = satellite;
+
+			if(typeof status === 'string') {
+				this.status = status;
+			}
+		}
+	},
+	async created() {
+		await this.getDashboardInfo();
 	}
 };
 </script>
-
-<style scoped>
-.status-box {
-	position: absolute;
-	left: 204px;
-	top: 120px;
-
-	width: 456px;
-	height: 120px;
-
-	background: #FEFEFF;
-	border-radius: 6px;
-}
-
-.status-title {
-	position: absolute;
-	left: 71px;
-	top: 57px;
-
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 100%;
-
-	display: flex;
-	align-items: center;
-
-	color: #0D1826;
-}
-
-.status-light {
-	position: absolute;
-	left: 249px;
-	top: 60px;
-
-	width: 12px;
-	height: 12px;
-
-	border-radius: 6px;
-
-	background: #37FDCE;
-}
-
-.status-text {
-	position: absolute;
-	left: 269px;
-	top: 58px;
-
-	width: 84px;
-	height: 16px;
-
-	display: flex;
-	align-items: center;
-
-	color: rgba(0, 0, 0, 0.7);
-}
-
-.gateway-box {
-	position: absolute;
-	left: 204px;
-	top: 274px;
-
-	width: 456px;
-	height: 344px;
-
-	background: #FEFEFF;
-	border-radius: 6px;
-}
-
-.gateway-title {
-	position: absolute;
-	left: 71px;
-	top: 50px;
-
-	width: 298px;
-	height: 18px;
-
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 100%;
-
-	display: flex;
-	align-items: center;
-
-	color: #0D1826;
-}
-
-.access-key-label {
-	position: absolute;
-	left: 71px;
-	top: 98px;
-
-	width: 88px;
-	height: 16px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
-	color: #384B65;
-}
-
-.access-key-show, .access-key-hide {
-	position: absolute;
-	left: 315px;
-	top: 96px;
-
-	width: 69px;
-	height: 14px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 100%;
-	/* identical to box height, or 14px */
-
-	display: flex;
-	align-items: center;
-
-	color: #9BA4B2;
-
-	cursor: pointer;
-}
-
-.access-key-show img {
-	position: absolute;
-	left: 46px;
-	top: 0px;
-
-	width: 20px;
-}
-
-.access-key-hide img {
-	position: absolute;
-	left: 46px;
-	top: -3px;
-
-	width: 20px;
-}
-
-.access-key {
-	position: absolute;
-
-	left: 72px;
-	top: 122px;
-
-	width: 312px;
-	height: 52px;
-
-	background: rgba(226, 229, 233, 0.4);
-	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	border-radius: 10px;
-
-	font-family: "Source Code Pro";
-	font-style: normal;
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 100%;
-
-	color: rgba(56, 75, 101, 0.75);
-
-	text-indent: 20px;
-}
-
-.secret-key-label {
-	position: absolute;
-	left: 71px;
-	top: 202px;
-
-	width: 82px;
-	height: 16px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
-	color: #384B65;
-}
-
-.secret-key {
-	position: absolute;
-	left: 72px;
-	top: 226px;
-
-	width: 312px;
-	height: 52px;
-
-	background: rgba(226, 229, 233, 0.4);
-	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	border-radius: 10px;
-
-	font-family: "Source Code Pro";
-	font-style: normal;
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 100%;
-
-	color: rgba(56, 75, 101, 0.75);
-
-	text-indent: 20px;
-}
-
-.secret-key-show, .secret-key-hide {
-	position: absolute;
-	left: 315px;
-	top: 201px;
-
-	width: 69px;
-	height: 14px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 100%;
-	/* identical to box height, or 14px */
-
-	display: flex;
-	align-items: center;
-
-	color: #9BA4B2;
-
-	cursor: pointer;
-}
-
-.secret-key-show img {
-	position: absolute;
-	left: 46px;
-	top: 0px;
-
-	width: 20px;
-}
-
-.secret-key-hide img {
-	position: absolute;
-	left: 46px;
-	top: -3px;
-
-	width: 20px;
-}
-
-.bucket-box {
-	position: absolute;
-	left: 684px;
-	top: 120px;
-
-	width: 552px;
-	height: 498px;
-
-	background: #FEFEFF;
-	border-radius: 6px;
-}
-
-.reconfigure {
-	position: absolute;
-	left: 352px;
-	top: 74px;
-
-	width: 127px;
-	height: 14px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 100%;
-	/* identical to box height, or 14px */
-
-	display: flex;
-	align-items: center;
-}
-
-.reconfigure > * {
-	width: 127px;
-	text-align: right !important;
-	color: #2683FF !important;
-}
-
-.bucket-title {
-	position: absolute;
-	left: 72px;
-	top: 71px;
-
-	width: 298px;
-	height: 18px;
-
-	font-weight: bold;
-	font-size: 18px;
-	line-height: 100%;
-	/* identical to box height, or 18px */
-
-	display: flex;
-	align-items: center;
-
-	color: #0D1826;
-}
-
-.satellite-label {
-	position: absolute;
-	left: 72px;
-	top: 119px;
-
-	width: 61px;
-	height: 16px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
-	color: #384B65;
-}
-
-.satellite {
-	position: absolute;
-	left: 72px;
-	top: 143px;
-
-	width: 407px;
-	height: 52px;
-
-	background: rgba(226, 229, 233, 0.4);
-	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	border-radius: 10px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 134.09%;
-
-	text-indent: 20px;
-
-	color: rgba(56, 75, 101, 0.75);
-}
-
-.api-key-label {
-	position: absolute;
-	left: 72px;
-	top: 223px;
-
-	width: 58px;
-	height: 16px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
-	color: #384B65;
-}
-
-.api-key {
-	position: absolute;
-	left: 72px;
-	top: 247px;
-
-	width: 407px;
-	height: 52px;
-
-	background: rgba(226, 229, 233, 0.4);
-	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	border-radius: 10px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 134.09%;
-
-	text-indent: 20px;
-
-	color: rgba(56, 75, 101, 0.75);
-}
-
-.passphrase-label {
-	position: absolute;
-	left: 73px;
-	top: 331px;
-
-	width: 174px;
-	height: 16px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
-	color: #384B65;
-}
-
-.passphrase {
-	position: absolute;
-	left: 73px;
-	top: 355px;
-
-	width: 407px;
-	height: 52px;
-
-	background: rgba(226, 229, 233, 0.4);
-	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	border-radius: 10px;
-
-	font-family: Inter;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 134.09%;
-
-	text-indent: 20px;
-
-	color: rgba(56, 75, 101, 0.75);
-}
-</style>

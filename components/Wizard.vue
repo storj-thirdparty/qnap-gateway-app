@@ -43,8 +43,24 @@
 				<label class="passphrase-label">Encryption Passphrase</label>
 				<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
 
-				<button class="continue" v-on:click="step++">Continue</button>
+				<button class="continue" v-on:click="step++" v-bind:disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
 			</div>
+
+			<div class="toast-wrapper">
+				<div id="api-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+				  <div class="toast-header">
+				    <img src="resources/img/icon-error.svg" class="rounded mr-2" alt="Error icon">
+				    <p class="toast-title mr-auto">API Key/Passphrase Failed. </p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+				  </div>
+					<div class="toast-body">
+						<p>Sign in to your selected Satellite at Tardigrade.io to verify your bucket details and retry.</p>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="step step-2" v-if="step === 2">
@@ -55,7 +71,7 @@
 				</div>
 
 				<h1 class="title">Save Your Keys</h1>
-				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You’ll need both later for configuring HSB 3 to backup your QNAP.</p>
+				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
 
 				<label class="access-key-label">Access Key</label>
 				<input type="text" class="access-key" value="35EzMZowEWjh9BJAv5okf2Sif9YV"></label>
@@ -67,6 +83,29 @@
 
 				<button class="continue" v-on:click="step++">Continue</button>
 			</div>
+
+			<div class="toast-wrapper">
+				<div id="access-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+				  <div class="toast-header">
+				    <img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
+				    <p class="toast-title mr-auto">Access Key Copied to Clipboard</p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+				  </div>
+				</div>
+
+				<div id="secret-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
+					<div class="toast-header">
+						<img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
+						<p class="toast-title mr-auto">Secret Key Copied to Clipboard</p>
+						<button type="button" class="ml-3 mb-0 close" data-dismiss="toast" aria-label="Close">
+							<img src="resources/img/icon-close.svg" class="icon-close" alt="Close icon">
+						</button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="step step-3" v-if="step === 3">
@@ -83,20 +122,45 @@
 				<p class="explaination">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
 
 				<button class="guide">Configuration Guide</button>
-				<!-- <a href="/" class="done">Done</a> -->
+
+				<a class="done" v-on:click="save">Done</a>
 			</div>
+
 		</div>
 	</div>
 </template>
 
+<style src="./Wizard.css" scoped></style>
+
 <script>
-module.exports = {
+import callEndpoint from './callEndpoint';
+
+export default {
 	data: () => ({
 		step: 1,
 
 		satellite: 'us-central-1.tardigrade.io',
 		apiKey: '',
 		passphrase: ''
-	})
+	}),
+	computed: {
+		isApiKeyValid() {
+			return this.apiKey !== '';
+		},
+		isPassphraseValid() {
+			return this.passphrase !== '';
+		}
+	},
+	methods: {
+		async save() {
+			await callEndpoint('wizard-save', {
+				satellite: this.satellite,
+				apiKey: this.apiKey,
+				passphrase: this.passphrase
+			});
+
+			this.$router.push({ path: '/' });
+		}
+	}
 };
 </script>
