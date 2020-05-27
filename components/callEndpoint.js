@@ -1,16 +1,23 @@
 import axios from 'axios';
 
 export default async (apiRequest, args = {}) => {
-	const input = {
-		apiRequest,
-		...args
-	};
+	return {};
 
-	return {data} = await axios.post('interface.php', input);
+	try {
+		const input = {
+			apiRequest,
+			...args
+		};
 
-	if(typeof data.error === 'string') {
-		throw new Error(data.error);
+		const {data} = await axios.post('interface.php', input);
+
+		if(typeof data.error === 'string') {
+			alert(`backend error: ${data.error}`);
+			throw new Error(data.error);
+		}
+
+		return data;
+	} catch(error) {
+		alert(`integration error: failed to connect to backend`);
 	}
-
-	return data;
 };

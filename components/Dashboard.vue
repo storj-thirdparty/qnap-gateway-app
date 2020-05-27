@@ -160,6 +160,10 @@ export default {
 				status
 			} = await callEndpoint('dashboard-info');
 
+			if(typeof accessKey !== 'string' || accessKey === '') {
+				 this.$router.push({ path: '/wizard' });
+			}
+
 			this.accessKey = accessKey;
 			this.secretKey = secretKey;
 			this.satellite = satellite;
