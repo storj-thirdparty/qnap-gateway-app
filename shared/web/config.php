@@ -201,8 +201,8 @@ if(isset($_POST['isRun']) && ($_POST['isRun'] == 1)) {
   logMessage("Loaded properties : " . print_r($prop, true));
 
 
-      if($prop['Port'] == "" && $prop['Port'] == null && $prop['Server Address'] == "" && $prop['Server Address'] == null && $prop['APIKey'] == "" && $prop['APIKey'] == null && $prop['Satellite'] == "" && $prop['Satellite'] == null && $prop['EncryptionPassphrase'] == "" && $prop['EncryptionPassphrase'] == null  && $prop['AccessKey'] == "" && $prop['SecretKey'] == null && $prop['AccessKey'] == null && $prop['SecretKey'] == ""){
-      //echo "<script>location.href = 'wizard.html';</script>";
+      if($prop['Port'] == "" && $prop['Port'] == null && $prop['Server Address'] == "" && $prop['Server Address'] == null && $prop['APIKey'] == "" && $prop['APIKey'] == null && $prop['Satellite'] == "" && $prop['Satellite'] == null &&   $prop['AccessKey'] == "" && $prop['SecretKey'] == null && $prop['AccessKey'] == null && $prop['SecretKey'] == ""){
+      echo "<script>location.href = 'index.html';</script>";
     }
   }
 
