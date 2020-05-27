@@ -1,5 +1,30 @@
 <?php
-	$file = "config.json";
+	# ------------------------------------------------------------------------
+	#  Set environment variables
+	# ------------------------------------------------------------------------
+	$filename = "config.json";
+
+	$platformBase   = $_SERVER['DOCUMENT_ROOT'];
+	$moduleBase     = $platformBase . dirname($_SERVER['PHP_SELF']) ;
+	$scriptsBase    = $moduleBase . '/scripts' ;
+
+
+	$file           = $moduleBase  . DIRECTORY_SEPARATOR . $filename  ;
+	$startScript    = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayrun.sh' ;
+	$configureScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayconfigure.sh' ;
+	$stopScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewaystop.sh' ;
+	$updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayupdate.sh' ;
+	$isRunning      = $scriptsBase . DIRECTORY_SEPARATOR . 'isRunning.sh' ;
+	$dockerConfigFile = 'gateway/config.yaml';
+	logMessage("------------------------------------------------------------------------------");
+	logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($scriptsBase)");
+	# ------------------------------------------------------------------------
+
+
+	$output = "";
+	
+
+	// $file = "config.json";
 	$arr = array ();
 	$data = json_decode(file_get_contents("php://input"), TRUE);
 	$jsondata = ReadJSON($file);
@@ -15,7 +40,9 @@
 			        "accessKey" => $jsondata['AccessKey'], 
 			        "secretKey" => $jsondata['SecretKey'],
 			        "satellite" => $jsondata['Satellite'],
+			        "status" => status(),
 			); 
+
 	  
 		}
 		// Endpoint to save the parameters and configuring the gateway
@@ -33,6 +60,8 @@
 				    $apiKey = $data['apiKey'];
 				    $passphrase = $data['passphrase'];
 
+				    Config($satellite,$apiKey,$passphrase);
+
 				}
 			}else{
 				$arr = array ( "error" => "Invalid or Unknown API Request"); 
@@ -48,11 +77,12 @@
 				}else{
 					if($data['action'] == "run"){
 
-						$arr = array ( "status" => "running"); 
+						$arr = array ( "status" => Run()); 
 
 					}else if($data['action'] == "stop"){
 
-						$arr = array ( "status" => "stopped"); 
+						$arr = array ( "status" => Stop()); 
+
 					}else if($data['action'] == "restart"){
 
 						$arr = array ( "status" => "restarting"); 
@@ -67,7 +97,6 @@
 	}else{
 		$arr = array ( "error" => "Invalid or Unknown API Request"); 
 	}
-
 	echo json_encode($arr); 
 
 	function ReadJSON($file)
@@ -76,6 +105,135 @@
 		$prop = json_decode($content, true);
 
 		return array('AccessKey'=>$prop['AccessKey'],'SecretKey'=>$prop['SecretKey'],'Satellite'=>$prop['Satellite']);
+	}
+
+
+
+	// Checking Geteway Process
+	function status(){
+		global $isRunning;
+		$output = shell_exec("/bin/bash $isRunning ");
+	    logMessage("Run status of container is $output ");
+	    if($output ==1){
+	    	 return "running";
+	    }else{
+	    	return "stopped";
+	    }
+	}
+
+	 // Run Gateway
+	function Run(){
+		global $startScript;
+		global $file;
+		logMessage("config.php called up with isRun (for Running gateway) 1 ");
+	    logEnvironment() ;
+	   
+	    $output = shell_exec("/bin/bash $startScript 2>&1 ");
+
+	    $jsonString = file_get_contents($file);
+	    $data = json_decode($jsonString, true);
+	    $data['last_log'] = $output;
+	    $newJsonString = json_encode($data);
+	    file_put_contents($file, $newJsonString);
+		return status();
+	}
+
+	// Stop Gateway
+	function Stop(){
+		global $stopScript;
+		global $file;
+		// Excute shell script for stoping gateway process
+		logMessage("config.php called up with isStopAjax 1 ");
+		logEnvironment() ;
+
+		$output = shell_exec("/bin/bash $stopScript 2>&1 ");
+
+		$jsonString = file_get_contents($file);
+		$data = json_decode($jsonString, true);
+		$data['last_log'] = $output;
+		$newJsonString = json_encode($data);
+		file_put_contents($file, $newJsonString);
+		return status();
+	}
+
+	// Configure Geteway
+	function Config($satellite,$apiKey,$passphrase){
+		global $file;
+		global $output;
+		$jsonString = file_get_contents($file);
+	    $data = json_decode($jsonString, true);
+
+	    $data['APIKey'] = $apiKey;
+	    $data['EncryptionPassphrase'] = $passphrase;
+	    $data['Satellite'] = $satellite;
+	    $newJsonString = json_encode($data);
+	    file_put_contents($file, $newJsonString);
+
+
+
+
+	    /* Reading Access key and secret key from YAML*/
+	    $searchaccesskey = 'minio.access-key';
+	    $searchsecretkey = 'minio.secret-key';
+	    $accesskey = "";
+	    $secretkey = "";
+
+	    header('Content-Type: text/plain');
+
+	    $contents = shell_exec('export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin ; docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 /root/.local/share/storj/gateway/config.yaml 2>&1 ');
+
+
+	    $pattern = preg_quote($searchaccesskey, '/');
+	    $pattern = "/^\s*${pattern}\s*:.*\$/m";
+
+	    $pattern1 = preg_quote($searchsecretkey, '/');
+	    $pattern1 = "/^\s*${pattern1}\s*:.*\$/m";
+
+	    if(preg_match_all($pattern, $contents, $matches)){
+	      $accesskey = implode("\n", $matches[0]);
+	    }
+	    else{
+	          $arr = array ( "status" => "No matches found"); 
+	    }
+
+	    if(preg_match_all($pattern1, $contents, $matches1)){
+	      $secretkey = implode("\n", $matches1[0]);
+	    }
+	    else{
+	    	$arr = array ( "status" => "No matches found"); 
+	    }
+	    $parts = explode(':', $accesskey);
+	    $parts1 = explode(':', $secretkey);
+	    $accesskey = str_replace(' ', '', $parts[1]);
+	    $secretkey = str_replace(' ', '', $parts1[1]);
+
+	    /* Update File again with Log value as well */
+	    $jsonfile = file_get_contents($file);
+	    $properties = json_decode($jsonfile, true);
+	    $properties['last_log'] = $output ;
+	    $properties['AccessKey'] = $accesskey ;
+	    $properties['SecretKey'] = $secretkey ;
+	    file_put_contents($file, json_encode($properties));
+
+	}
+
+
+	function logEnvironment() {
+	  logMessage(
+	    "\n----------------------------------------------\n"
+	    . "ENV is : " . print_r($_ENV, true)
+	    . "POST is : " . print_r($_POST, true)
+	    . "SERVER is : " . print_r($_SERVER, true)
+	    . "----------------------------------------------\n"
+	  );
+	}
+
+	function logMessage($message) {
+	    $file = "/var/log/GATEWAY" ;
+	    // $file = "test" ;
+	    $message = preg_replace('/\n$/', '', $message);
+	    $date = `date` ; $timestamp = str_replace("\n", " ", $date);
+	    file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);
 	}
 
 ?>
