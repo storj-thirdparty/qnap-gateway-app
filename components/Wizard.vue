@@ -46,7 +46,7 @@
 				<button class="continue" v-on:click="step++" v-bind:disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
 			</div>
 
-			<div class="toast-wrapper">
+			<!--<div class="toast-wrapper">
 				<div id="api-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
 				  <div class="toast-header">
 				    <img src="resources/img/icon-error.svg" class="rounded mr-2" alt="Error icon">
@@ -59,7 +59,7 @@
 						<p>Sign in to your selected Satellite at Tardigrade.io to verify your bucket details and retry.</p>
 					</div>
 				</div>
-			</div>
+			</div>-->
 
 		</div>
 
@@ -74,17 +74,17 @@
 				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
 
 				<label class="access-key-label">Access Key</label>
-				<input type="text" class="access-key" value="35EzMZowEWjh9BJAv5okf2Sif9YV"></label>
+				<input type="text" class="access-key" value=""></label>
 				<button class="access-key-copy">Copy</button>
 
 				<label class="secret-key-label">Secret Key</label>
-				<input type="text" class="secret-key" value="2sHDQ6n8rPLuhBve8aaWrR3Grq55">
+				<input type="text" class="secret-key" value="">
 				<button class="secret-key-copy">Copy</button>
 
 				<button class="continue" v-on:click="step++">Continue</button>
 			</div>
 
-			<div class="toast-wrapper">
+			<!--<div class="toast-wrapper">
 				<div id="access-key-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="true">
 				  <div class="toast-header">
 				    <img src="resources/img/icon-success.svg" class="rounded mr-2" alt="Success icon">
@@ -104,7 +104,7 @@
 						</button>
 					</div>
 				</div>
-			</div>
+			</div>-->
 
 		</div>
 
