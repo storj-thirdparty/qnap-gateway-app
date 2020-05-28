@@ -2,17 +2,17 @@
 	<div class="screen wizard">
 
 		<div class="setup-dot"></div>
-		<p class="setup-label" v-bind:class="{ 'label-active': step == 1 }">Gateway Setup</p>
+		<p class="setup-label" :class="{ 'label-active': step === 1 }">Gateway Setup</p>
 
-		<div class="bar-1" v-bind:class="{ 'bar-active': step > 1 }"></div>
+		<div class="bar-1" :class="{ 'bar-active': step > 1 }"></div>
 
-		<div class="keys-dot" v-bind:class="{ 'dot-active': step > 1 }"></div>
-		<p class="keys-label" v-bind:class="{ 'label-active': step == 2 }">Save Keys</p>
+		<div class="keys-dot" :class="{ 'dot-active': step > 1 }"></div>
+		<p class="keys-label" :class="{ 'label-active': step === 2 }">Save Keys</p>
 
-		<div class="bar-2" v-bind:class="{ 'bar-active': step > 2 }"></div>
+		<div class="bar-2" :class="{ 'bar-active': step > 2 }"></div>
 
-		<div class="configure-dot" v-bind:class="{ 'dot-active': step > 2 }" ></div>
-		<p class="configure-label" v-bind:class="{ 'label-active': step == 3 }">Configure HBS 3</p>
+		<div class="configure-dot" :class="{ 'dot-active': step > 2 }"></div>
+		<p class="configure-label" :class="{ 'label-active': step === 3 }">Configure HBS 3</p>
 
 		<div class="step-1" v-if="step === 1">
 			<div class="signup"></div>
@@ -43,7 +43,7 @@
 				<label class="passphrase-label">Encryption Passphrase</label>
 				<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
 
-				<button class="continue" v-on:click="step++" v-bind:disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
+				<button class="continue" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
 			</div>
 
 			<!--<div class="toast-wrapper">
@@ -74,14 +74,14 @@
 				<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
 
 				<label class="access-key-label">Access Key</label>
-				<input type="text" class="access-key" value=""></label>
-				<button class="access-key-copy">Copy</button>
+				<input type="text" class="access-key" v-model="accessKey">
+				<button class="access-key-copy" v-clipboard:copy="accessKey">Copy</button>
 
 				<label class="secret-key-label">Secret Key</label>
-				<input type="text" class="secret-key" value="">
-				<button class="secret-key-copy">Copy</button>
+				<input type="text" class="secret-key" v-model="secretKey">
+				<button class="secret-key-copy" v-clipboard:copy="secretKey">Copy</button>
 
-				<button class="continue" v-on:click="step++">Continue</button>
+				<button class="continue" @click="step++">Continue</button>
 			</div>
 
 			<!--<div class="toast-wrapper">
@@ -123,7 +123,7 @@
 
 				<button class="guide">Configuration Guide</button>
 
-				<a class="done" v-on:click="save">Done</a>
+				<a class="done" @click="save">Done</a>
 			</div>
 
 		</div>
@@ -141,7 +141,9 @@ export default {
 
 		satellite: 'us-central-1.tardigrade.io',
 		apiKey: '',
-		passphrase: ''
+		passphrase: '',
+		accessKey: '',
+		secretKey: '',
 	}),
 	computed: {
 		isApiKeyValid() {
@@ -160,6 +162,17 @@ export default {
 			});
 
 			this.$router.push({ path: '/' });
+		},
+
+		async firstStepContinue() {
+			const {
+				accessKey,
+				secretKey,
+			} = await callEndpoint('dashboard-info');
+
+			this.accessKey = accessKey;
+			this.secretKey = secretKey;
+			this.step++;
 		}
 	}
 };
