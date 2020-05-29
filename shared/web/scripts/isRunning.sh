@@ -2,7 +2,7 @@
 # This script checks the running of gateway container
 PKGNAME="GATEWAY"
 LOG="/var/log/$PKGNAME"
-CONTAINER_NAME=storjlabsgateway
+CONTAINER_NAME=storjlabsgatewayrun
 if [[ $# -gt 0 ]]
 then
     CONTAINER_NAME=$1

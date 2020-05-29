@@ -5,7 +5,7 @@ LOG="/var/log/$PKGNAME"
 echo `date` "GATEWAY is being stopped " >> $LOG
 
 export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
-CONTAINER_NAME=storjlabsgateway
+CONTAINER_NAME=storjlabsgatewayrun
 
 echo `date` " Stopping  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
