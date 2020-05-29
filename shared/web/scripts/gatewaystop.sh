@@ -9,7 +9,7 @@ CONTAINER_NAME=storjlabsgateway
 
 echo `date` " Stopping  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd="docker stop ${CONTAINER_NAME} 2>&1 "
+cmd=`docker stop ${CONTAINER_NAME} 2>&1 `
 if [[ "x$cmd" == "x${CONTAINER_NAME}" ]]
 then
 	output="Success in stopping Tardigrade Gateway ${CONTAINER_NAME}"

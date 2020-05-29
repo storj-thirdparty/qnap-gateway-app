@@ -130,7 +130,7 @@
 	</div>
 </template>
 
-<style src="./Wizard.css" scoped></style>
+<style src="../../resources/css/Wizard.css" scoped></style>
 
 <script>
 import callEndpoint from './callEndpoint';
@@ -165,6 +165,13 @@ export default {
 		},
 
 		async firstStepContinue() {
+			
+			await callEndpoint('wizard-save', {
+				satellite: this.satellite,
+				apiKey: this.apiKey,
+				passphrase: this.passphrase
+			});
+
 			const {
 				accessKey,
 				secretKey,

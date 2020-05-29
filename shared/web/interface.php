@@ -27,7 +27,6 @@
 	// $file = "config.json";
 	$arr = array ();
 	$data = json_decode(file_get_contents("php://input"), TRUE);
-	$jsondata = ReadJSON($file);
 	$apiRequest = "";
 
 	// Endpoint to return the dashboard info to wizard
@@ -36,6 +35,7 @@
 		$apiRequest = $data['apiRequest'];
 
 		if ($apiRequest === 'dashboard-info') {
+			$jsondata = ReadJSON($file);
 			$arr = array ( 
 			        "accessKey" => $jsondata['AccessKey'], 
 			        "secretKey" => $jsondata['SecretKey'],
@@ -58,9 +58,10 @@
 				}else{
 				    $satellite = $data['satellite'];
 				    $apiKey = $data['apiKey'];
-				    $passphrase = $data['passphrase'];
+					$passphrase = $data['passphrase'];
+					$port = "127.0.0.1:7777:7777";
 
-				    Config($satellite,$apiKey,$passphrase);
+				    configureGateway($port,$satellite,$apiKey,$passphrase);
 
 				}
 			}else{
@@ -77,15 +78,15 @@
 				}else{
 					if($data['action'] == "run"){
 
-						$arr = array ( "status" => Run()); 
+						$arr = array ( "status" => runGateway()); 
 
 					}else if($data['action'] == "stop"){
 
-						$arr = array ( "status" => Stop()); 
+						$arr = array ( "status" => stopGateway()); 
 
 					}else if($data['action'] == "restart"){
 
-						$arr = array ( "status" => "restarting"); 
+						$arr = array ( "status" =>  restartGateway()); 
 					}
 				}
 			}else{
@@ -115,59 +116,70 @@
 		$output = shell_exec("/bin/bash $isRunning ");
 	    logMessage("Run status of container is $output ");
 	    if($output ==1){
-	    	 return "running";
+	    	 return "connected";
 	    }else{
 	    	return "stopped";
 	    }
 	}
 
 	 // Run Gateway
-	function Run(){
+	function runGateway(){
 		global $startScript;
 		global $file;
-		logMessage("config.php called up with isRun (for Running gateway) 1 ");
+		logMessage("Interface called to run Gateway ");
 	    logEnvironment() ;
 	   
 	    $output = shell_exec("/bin/bash $startScript 2>&1 ");
 
-	    $jsonString = file_get_contents($file);
-	    $data = json_decode($jsonString, true);
-	    $data['last_log'] = $output;
-	    $newJsonString = json_encode($data);
-	    file_put_contents($file, $newJsonString);
 		return status();
 	}
 
 	// Stop Gateway
-	function Stop(){
+	function stopGateway() {}{
 		global $stopScript;
 		global $file;
 		// Excute shell script for stoping gateway process
-		logMessage("config.php called up with isStopAjax 1 ");
+		logMessage("Interface called to stop Gateway ");
 		logEnvironment() ;
 
 		$output = shell_exec("/bin/bash $stopScript 2>&1 ");
 
-		$jsonString = file_get_contents($file);
-		$data = json_decode($jsonString, true);
-		$data['last_log'] = $output;
-		$newJsonString = json_encode($data);
-		file_put_contents($file, $newJsonString);
+
 		return status();
 	}
 
+		// Stop Gateway
+		function restartGateway() {}{
+			global $stopScript;
+			global $startScript;
+			global $file;
+			// Excute shell script for stoping gateway process
+			logMessage("Interface called to restart Gateway ");
+
+			logEnvironment() ;
+			stopGateway() ;
+			runGateway() ;
+	
+			return status();
+		}
+
 	// Configure Geteway
-	function Config($satellite,$apiKey,$passphrase){
+	function configureGateway($port,$satellite,$apiKey,$passphrase){
 		global $file;
 		global $output;
+		global $configureScript;
 		$jsonString = file_get_contents($file);
 	    $data = json_decode($jsonString, true);
 
-	    $data['APIKey'] = $apiKey;
-	    $data['EncryptionPassphrase'] = $passphrase;
+		$data['Port'] = $port;
+		$data['APIKey'] = $apiKey;
 	    $data['Satellite'] = $satellite;
+
 	    $newJsonString = json_encode($data);
-	    file_put_contents($file, $newJsonString);
+		file_put_contents($file, $newJsonString);
+		
+		logMessage("Interface called to save parameters and configure Gateway ");
+		$output = shell_exec("/bin/bash $configureScript $port $satellite $apiKey $passphrase 2>&1 ");
 
 
 
@@ -230,7 +242,6 @@
 
 	function logMessage($message) {
 	    $file = "/var/log/GATEWAY" ;
-	    // $file = "test" ;
 	    $message = preg_replace('/\n$/', '', $message);
 	    $date = `date` ; $timestamp = str_replace("\n", " ", $date);
 	    file_put_contents($file, $timestamp . $message . "\n", FILE_APPEND);
