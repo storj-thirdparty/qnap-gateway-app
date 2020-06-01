@@ -17,7 +17,7 @@
 		<div class="step-1" v-if="step === 1">
 			<div class="signup"></div>
 			<p class="signup-text">Before setting up Tardigrade S3 Gateway for QNAP, you&apos;ll need and account on Tardigrade.io</p>
-			<button class="signup-button">Sign Up</button>
+			<a href="https://tardigrade.io/satellites/" target="blank"><button class="signup-button">Sign Up</button></a>
 
 			<div class="background">
 				<img class="logo" src="resources/img/gateway-logo.svg">
@@ -25,7 +25,7 @@
 				<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
 				<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
 
-				<a href="#" class="docs">S3 Gateway Docs</a>
+				<a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" class="docs" target="blank">S3 Gateway Docs</a>
 
 				<h2 class="bucket-details">Bucket Details</h2>
 
@@ -165,7 +165,7 @@ export default {
 		},
 
 		async firstStepContinue() {
-			document.getElementById("btn").classList.add("opacity");
+			document.getElementById("btn").classList.add("button-opacity");
 			document.getElementById("loader").classList.remove("dnone");
 			await callEndpoint('wizard-save', {
 				satellite: this.satellite,

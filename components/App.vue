@@ -1,21 +1,21 @@
 <template>
-	<div>
-		<nav>
-			<div class="screen">
-				<router-link to="/">
-					<img src="resources/img/tardigrade.png" class="tardigrade">
-				</router-link>
+  <div>
+    <nav>
+      <div class="screen">
+        <router-link to="/">
+          <img src="../resources/img/tardigrade.png" class="tardigrade">
+        </router-link>
 
-				<span class="spacer"></span>
-				<p class="gateway">S3 Gateway</p>
+        <span class="spacer"></span>
+        <p class="gateway">S3 Gateway</p>
 
-				<a href="#" class="docs">S3 Gateway Docs</a>
-				<a href="#" class="login">Tardigrade Login</a>
-			</div>
-		</nav>
+        <a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" target="blank" class="docs">S3 Gateway Docs</a>
+        <a href="https://tardigrade.io/satellites/" class="login" target="blank">Tardigrade Login</a>
+      </div>
+    </nav>
 
-		<router-view></router-view>
-	</div>
+    <router-view></router-view>
+  </div>
 </template>
 
-<style src="./App.css"></style>
+<style src="../resources/css/App.css"></style>
