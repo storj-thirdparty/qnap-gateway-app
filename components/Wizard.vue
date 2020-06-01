@@ -43,7 +43,7 @@
 				<label class="passphrase-label">Encryption Passphrase</label>
 				<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
 
-				<button class="continue" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue</button>
+				<button class="continue" id="btn" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue<i class="fa fa-spinner fa-spin dnone" id="loader"></i></button>
 			</div>
 
 			<!--<div class="toast-wrapper">
@@ -75,11 +75,11 @@
 
 				<label class="access-key-label">Access Key</label>
 				<input type="text" class="access-key" v-model="accessKey">
-				<button class="access-key-copy" v-clipboard:copy="accessKey">Copy</button>
+				<button class="access-key-copy" @click.stop.prevent="copyAccessKey">Copy</button>
 
 				<label class="secret-key-label">Secret Key</label>
 				<input type="text" class="secret-key" v-model="secretKey">
-				<button class="secret-key-copy" v-clipboard:copy="secretKey">Copy</button>
+				<button class="secret-key-copy" @click.stop.prevent="copySecretKey">Copy</button>
 
 				<button class="continue" @click="step++">Continue</button>
 			</div>
@@ -155,17 +155,18 @@ export default {
 	},
 	methods: {
 		async save() {
-			await callEndpoint('wizard-save', {
-				satellite: this.satellite,
-				apiKey: this.apiKey,
-				passphrase: this.passphrase
-			});
+			// await callEndpoint('wizard-save', {
+			// 	satellite: this.satellite,
+			// 	apiKey: this.apiKey,
+			// 	passphrase: this.passphrase
+			// });
 
 			this.$router.push({ path: '/' });
 		},
 
 		async firstStepContinue() {
-			
+			document.getElementById("btn").classList.add("opacity");
+			document.getElementById("loader").classList.remove("dnone");
 			await callEndpoint('wizard-save', {
 				satellite: this.satellite,
 				apiKey: this.apiKey,
@@ -180,7 +181,33 @@ export default {
 			this.accessKey = accessKey;
 			this.secretKey = secretKey;
 			this.step++;
+		},
+
+		copyAccessKey () {
+	          let accessKeyToCopy = document.querySelector('.access-key')
+	          accessKeyToCopy.setAttribute('type', 'text')
+	          accessKeyToCopy.select()
+
+	          try {
+	            var successful = document.execCommand('copy');
+	            var msg = successful ? 'successful' : 'unsuccessful';
+	          } catch (err) {
+	            alert("Oops, unable to copy");
+	          }
+        },
+
+        copySecretKey () {
+	          let secretKeyToCopy = document.querySelector('.secret-key')
+	          secretKeyToCopy.setAttribute('type', 'text')
+	          secretKeyToCopy.select()
+
+	          try {
+	            var successful = document.execCommand('copy');
+	            var msg = successful ? 'successful' : 'unsuccessful';
+	          } catch (err) {
+	            alert("Oops, unable to copy");
+	          }
+        	},
 		}
-	}
 };
 </script>
