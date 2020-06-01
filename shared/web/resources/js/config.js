@@ -234,9 +234,8 @@ jQuery("#startbtn").click(function(e) {
     jQuery.ajax({
       type: "POST",
       url: "config.php",
-      data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isajax : 1},
+      data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isRun : 1},
       success: function (result) {
-        //console.log("I am here");
         window.location.reload();
 
         // // log message
@@ -258,10 +257,9 @@ jQuery("#stopbtn").click(function(e) {
       url: "config.php",
       data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isConfig : 1},
       success: function (result) {
-        //console.log("I am here");
         window.location.reload();
 
-        // // log message
+        // log message
          $('iframe').contents().find('body').html('<p>'+result+'</p>');
 
       },
@@ -279,7 +277,6 @@ jQuery("#updatebtn").click(function(e) {
       url: "config.php",
       data: {address : address_val, server : server_val, api : api_val, satellite : satelliteval_val, encryptionPassphrase: encryptionPassphrase_val, isUpdateAjax : 1},
       success: function (result) {
-        //console.log("I am here");
         window.location.reload();
       },
       error: function () {
@@ -289,19 +286,48 @@ jQuery("#updatebtn").click(function(e) {
 });
 
 
+jQuery("#stop").click(function(e) {
+
+    jQuery.ajax({
+      type: "POST",
+      url: "config.php",
+      data: {isStop : 1},
+      success: function (result) {
+        window.location.reload();
+
+        // log message
+         $('iframe').contents().find('body').html('<p>'+result+'</p>');
+
+      },
+      error: function () {
+        // log message
+         $('iframe').contents().find('body').html('<p>'+result+'</p>');
+        console.log("In there wrong");
+      }
+    });
+});
+
 
 jQuery.ajax({
     type: "POST",
     url: "config.php",
-    data: { isrun : 1},
+    data: { checkProcess : 1},
     success: function (resposnse) {
       if(resposnse) {
         // log message
         if(resposnse ==1){
           $(".editbtn").attr("disabled",true).css("cursor","not-allowed");
+          $("#stop").attr("disabled",false).css("cursor","pointer");
+          $("#startbtn").attr("disabled",true).css("cursor","not-allowed");
         }else if(resposnse ==0){
           $(".editbtn").attr("disabled",false).css("cursor","pointer");
+          $("#stop").attr("disabled",true).css("cursor","not-allowed");
+          $("#startbtn").attr("disabled",false).css("cursor","pointer");
+        }else{
+          $("#stop").attr("disabled",true).css("cursor","not-allowed");
         }
+      }else{
+        $("#stop").attr("disabled",true).css("cursor","not-allowed");
       }
     },
     error: function () {
@@ -310,3 +336,6 @@ jQuery.ajax({
       $('iframe').contents().find('body').html('<p>'+resposnse+'</p>');
     }
   });
+
+var last_log = $("#last_log").text();
+$('iframe').contents().find('body').html('<p>'+last_log+'</p>');

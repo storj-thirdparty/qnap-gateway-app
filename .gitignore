@@ -117,3 +117,6 @@ dist
 
 .DS_Store
 bundle.js
+qnap-gateway-app.zip
+build/GATEWAY_0.0.8.qpkg
+build/

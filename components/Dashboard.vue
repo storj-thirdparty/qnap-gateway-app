@@ -82,7 +82,7 @@
 									<button type="button" class="btn btn-lg btn-outline-primary btn-block" data-dismiss="modal">Cancel</button>
 								</div>
 								<div class="col-6">
-									<button type="button" class="btn btn-lg btn-primary btn-block">Yes, Reconfigure</button>
+									<router-link to="/wizard"><button type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Yes, Reconfigure</button></router-link>
 								</div>
 							</div>
 			      </div>
@@ -104,7 +104,7 @@
 	</div>
 </template>
 
-<style src="./Dashboard.css" scoped></style>
+<style src="../../resources/css/Dashboard.css" scoped></style>
 
 <script>
 import callEndpoint from './callEndpoint';
@@ -140,7 +140,7 @@ export default {
 		},
 		async start() {
 			await callEndpoint('gateway-action', {
-				action: 'start'
+				action: 'run'
 			});
 
 			await this.getDashboardInfo();
