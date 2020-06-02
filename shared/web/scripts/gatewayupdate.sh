@@ -14,13 +14,11 @@ export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
 #       Container Updation logic 
 # ------------------------------------------------------------------------------
 set -e
-BASE_IMAGE="storjlabs/gateway:ca666a0-v1.1.1-go1.13.8"
+BASE_IMAGE="storjlabs/gateway:latest"
 CONTAINER_NAME=storjlabsgatewayrun
 REGISTRY=""
 IMAGE="$BASE_IMAGE"
-#REGISTRY="registry.hub.docker.com"
-#IMAGE="storjlabs/storagenode:beta"
-#IMAGE="$REGISTRY/$BASE_IMAGE"
+
 CID=$(docker ps | grep ${CONTAINER_NAME} | awk '{print $1}')
 
 OLD=`docker inspect --format "{{.Id}}" $IMAGE`
@@ -38,7 +36,7 @@ then
 	# ------------------------------------------------------------------
 	# Re-start new container with related params
 	# ------------------------------------------------------------------
-	docker run -d --name ${CONTAINER_NAME} -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 run
+	docker run -d --name ${CONTAINER_NAME} -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest run
 	echo `date` "Iamge $IMAGE updated (And running container $CONTAINER_NAME updated)" >> $LOG
     else
 	echo `date` "Image $IMAGE updated (And no container was running)" >> $LOG

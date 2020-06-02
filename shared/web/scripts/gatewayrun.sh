@@ -6,13 +6,12 @@ echo `date` "GATEWAY is being run" >> $LOG
 
 export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
 CONTAINER_NAME=storjlabsgatewayrun
-#IMAGE_NAME=storjlabs/gateway:ca666a0-v1.1.1-go1.13.8
 
 moduleBase=$1
 
 echo `date` " Starting Tardigrade Gateway ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd="docker run -d --name ${CONTAINER_NAME} -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 run"
+cmd="docker run -d --name ${CONTAINER_NAME} -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest run"
 
 echo "$cmd" >> $LOG
 output=`$cmd >> $LOG 2>&1 `
