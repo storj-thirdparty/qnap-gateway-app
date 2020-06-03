@@ -192,7 +192,7 @@
 
 	    header('Content-Type: text/plain');
 
-	    $contents = shell_exec('export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin ; docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:ca666a0-v1.1.1-go1.13.8 /root/.local/share/storj/gateway/config.yaml 2>&1 ');
+	    $contents = shell_exec('export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin ; docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:latest /root/.local/share/storj/gateway/config.yaml 2>&1 ');
 
 
 	    $pattern = preg_quote($searchaccesskey, '/');
