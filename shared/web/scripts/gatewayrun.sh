@@ -11,7 +11,7 @@ moduleBase=$1
 
 echo `date` " Starting Tardigrade Gateway ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd="docker run -d --name ${CONTAINER_NAME} -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest run"
+cmd="docker run -d --name ${CONTAINER_NAME} -p 127.0.0.1:7777:7777 -v ${moduleBase}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest run"
 
 echo "$cmd" >> $LOG
 output=`$cmd >> $LOG 2>&1 `
