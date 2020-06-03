@@ -136,10 +136,10 @@ if(isset($_POST['isRun']) && ($_POST['isRun'] == 1)) {
     $content = file_get_contents($file);
     $properties = json_decode($content, true);
 
-    logMessage("config called up with isUpdateAjax 1 ");
+    logMessage("config called to update GATEWAY ");
     $server_address = $_SERVER['SERVER_ADDR'] ;
     //Log to be worked upon to correct the path and parameters
-    $output = shell_exec("/bin/bash $updateScript $file $_address $_wallet $_emailId $_storage $_identity_directory $_directory $server_address 2>&1 ");
+    $output = shell_exec("/bin/bash $updateScript 2>&1 ");
 
     /* Update File again with Log value as well */
     $properties['last_log'] = $output ;

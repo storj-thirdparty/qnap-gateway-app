@@ -254,7 +254,7 @@ updateCron() {
 
 # Setup CRON Tab entry
 fetchCron
-addEntryToCronTable "5 0 * * * ${BASE_PATH}/scripts/gatewayupdate.sh ${CONFIG_FILE} "
+addEntryToCronTable "5 0 * * * ${BASE_PATH}/scripts/gatewayupdate.sh "
 updateCron
 # ------- cron setup ------------------------------
 
