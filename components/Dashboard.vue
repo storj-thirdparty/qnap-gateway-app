@@ -104,7 +104,7 @@
 	</div>
 </template>
 
-<style src="../../resources/css/Dashboard.css" scoped></style>
+<style src="./Dashboard.css" scoped></style>
 
 <script>
 import callEndpoint from './callEndpoint';

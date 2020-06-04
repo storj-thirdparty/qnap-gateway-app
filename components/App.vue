@@ -3,7 +3,7 @@
     <nav>
       <div class="screen">
         <router-link to="/">
-          <img src="../resources/img/tardigrade.png" class="tardigrade">
+          <img src="resources/img/tardigrade.png" class="tardigrade">
         </router-link>
 
         <span class="spacer"></span>
@@ -18,4 +18,4 @@
   </div>
 </template>
 
-<style src="../resources/css/App.css"></style>
+<style src="./App.css"></style>

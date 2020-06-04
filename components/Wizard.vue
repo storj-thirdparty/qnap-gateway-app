@@ -130,7 +130,7 @@
 	</div>
 </template>
 
-<style src="../../resources/css/Wizard.css" scoped></style>
+<style src="./Wizard.css" scoped></style>
 
 <script>
 import callEndpoint from './callEndpoint';
