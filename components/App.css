@@ -43,13 +43,12 @@ nav .gateway {
 	letter-spacing: 0.25px;
 	color: #FFFFFF;
 }
-
-.navbar-dark .navbar-nav .nav-link {
-    color: #fff;
-}
-
 .nav-link:hover {
 	text-decoration: underline;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
 }
 
 .navbar-toggler {
