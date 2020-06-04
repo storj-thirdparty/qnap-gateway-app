@@ -24,6 +24,7 @@ nav .spacer {
 	width: 0;
 	height: 20px;
 	border: 0.5px solid #FFFFFF;
+	margin-left: 4px;
 }
 
 nav .gateway {
@@ -34,8 +35,11 @@ nav .gateway {
 	line-height: 23px;
 	letter-spacing: 0.25px;
 	color: #FFFFFF;
-	margin-left: 10px;
+	margin-left: 9px;
 	margin-bottom: 0;
+	position: relative;
+	top: -1px;
+	display: inline-block;
 }
 
 .nav-link {

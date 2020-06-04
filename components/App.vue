@@ -4,9 +4,9 @@
     <nav class="navbar navbar-expand-sm navbar-dark">
       <router-link to="/" class="navbar-brand">
         <img src="resources/img/tardigrade.png" class="tardigrade">
+        <span class="spacer"></span>
+        <p class="gateway">S3 Gateway</p>
       </router-link>
-      <span class="spacer"></span>
-      <p class="gateway">S3 Gateway</p>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
