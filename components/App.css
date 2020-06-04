@@ -59,3 +59,7 @@ nav .gateway {
 .nav-link:hover {
 	text-decoration: underline;
 }
+
+.navbar-toggler {
+	border: 0;
+}
