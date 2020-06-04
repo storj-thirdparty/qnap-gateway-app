@@ -3,14 +3,6 @@ body {
 	font-family: "Inter";
 }
 
-.screen {
-	position: relative;
-	width: 1440px;
-
-	margin-left: auto;
-	margin-right: auto;
-}
-
 nav {
 	background: #0C2546;
 }
