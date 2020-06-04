@@ -116,8 +116,8 @@ PKG_PRE_REMOVE="{
 # Cleanup docker containers and images
 # -----------------------------------------------------------
 export PATH=\$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
-BASE_IMAGE=GATEWAYlabs/gateway:f8ef66c-v1.0.4-go1.13.8
-CONTAINER_NAME=storjlabsgateway
+BASE_IMAGE=storjlabs/gateway:latest
+CONTAINER_NAME=storjlabsgatewayrun
 LOGFILE=$LOGFILE
 IMAGE=\$BASE_IMAGE
 REGISTRY=
