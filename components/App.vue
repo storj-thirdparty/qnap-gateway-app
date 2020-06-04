@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <nav class="navbar navbar-expand-sm">
+    <nav class="navbar navbar-expand-sm navbar-dark">
       <router-link to="/" class="navbar-brand">
         <img src="resources/img/tardigrade.png" class="tardigrade">
       </router-link>
