@@ -105,7 +105,7 @@
 
 			<div class="col-md">
 
-				<div class="bucket-box">
+				<div class="bucket-box mb-5">
 
 					<div class="row">
 
