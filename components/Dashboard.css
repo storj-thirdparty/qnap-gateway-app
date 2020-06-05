@@ -109,8 +109,6 @@
 	font-style: normal;
 	font-weight: normal;
 	font-size: 16px;
-	display: flex;
-	align-items: center;
 	color: #384B65;
 }
 
@@ -131,9 +129,15 @@
 .access-key-show img {
 	width: 20px;
 }
-
 .access-key-hide img {
 	width: 20px;
+	position: relative;
+	top: 1px;
+}
+
+.access-key-hide span {
+	position: relative;
+	top: 2px;
 }
 
 .access-key {
@@ -191,9 +195,15 @@
 .secret-key-show img {
 	width: 20px;
 }
-
 .secret-key-hide img {
 	width: 20px;
+	position: relative;
+	top: 1px;
+}
+
+.secret-key-hide span {
+	position: relative;
+	top: 2px;
 }
 
 .bucket-box {

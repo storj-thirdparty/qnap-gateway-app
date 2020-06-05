@@ -72,8 +72,8 @@
 							<p class="access-key-label">Access Key</p>
 						</div>
 						<div class="col text-right">
-							<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false">Show <img src="resources/img/show.png"></p>
-							<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true">Hide <img src="resources/img/hide.png"></p>
+							<p class="access-key-show" v-on:click="accessKeyShown = true" v-if="accessKeyShown === false"><span>Show</span> <img src="resources/img/show.png"></p>
+							<p class="access-key-hide" v-on:click="accessKeyShown = false" v-if="accessKeyShown === true"><span>Hide</span> <img src="resources/img/hide.png"></p>
 						</div>
 					</div>
 
@@ -88,8 +88,8 @@
 							<p class="secret-key-label">Secret Key</p>
 						</div>
 						<div class="col text-right">
-							<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false">Show <img src="resources/img/show.png"></p>
-							<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true">Hide <img src="resources/img/hide.png"></p>
+							<p class="secret-key-show" v-on:click="secretKeyShown = true" v-if="secretKeyShown === false"><span>Show</span> <img src="resources/img/show.png"></p>
+							<p class="secret-key-hide" v-on:click="secretKeyShown = false" v-if="secretKeyShown === true"><span>Hide</span> <img src="resources/img/hide.png"></p>
 						</div>
 					</div>
 
