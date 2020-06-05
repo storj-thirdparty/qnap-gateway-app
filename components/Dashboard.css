@@ -135,6 +135,11 @@
 	line-height: 100%;
 	color: #9BA4B2;
 	cursor: pointer;
+	height: 14px;
+}
+.access-key-show {
+	position: relative;
+	top: 2px;
 }
 
 .access-key-show img {
@@ -195,6 +200,10 @@
 	line-height: 100%;
 	color: #9BA4B2;
 	cursor: pointer;
+}
+.secret-key-show {
+	position: relative;
+	top: 2px;
 }
 
 .secret-key-show img {
