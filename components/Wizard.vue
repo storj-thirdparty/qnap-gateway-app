@@ -41,7 +41,7 @@
 							<img class="logo" src="resources/img/gateway-logo.svg">
 							<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
 							<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
-							<a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" class="docs" target="blank">S3 Gateway Docs</a>
+							<a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" class="docs mb-5" target="blank">S3 Gateway Docs</a>
 						</div>
 
 						<div class="col-sm-12 col-md-6">
