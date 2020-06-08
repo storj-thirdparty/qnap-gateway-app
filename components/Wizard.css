@@ -159,12 +159,8 @@ button:disabled {
 .step-1 .satellite {
 	text-indent: 4px;
   height: 52px;
-	background: #FFFFFF;
 	border: 1px solid #E2E6E9;
-	box-sizing: border-box;
-	overflow: hidden;
 	border-radius: 10px;
-	font-weight: normal;
 	font-size: 16px;
 	color: #384B65;
 }
