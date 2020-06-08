@@ -21,11 +21,18 @@
 					</div>
 			</div>
 
-
 			<div class="step-1" v-if="step === 1">
-				<div class="signup"></div>
-				<p class="signup-text">Before setting up Tardigrade S3 Gateway for QNAP, you&apos;ll need and account on Tardigrade.io</p>
-				<a href="https://tardigrade.io/satellites/" target="blank"><button class="signup-button">Sign Up</button></a>
+				
+				<div class="signup">
+					<div class="row">
+						<div class="col-sm-12 col-md-9">
+							<p class="signup-text">Before setting up Tardigrade S3 Gateway for QNAP, you&apos;ll need and account on Tardigrade.io</p>
+						</div>
+						<div class="col-sm-12 col-md-3 text-md-right">
+							<button class="signup-button" href="https://tardigrade.io/satellites/" target="blank">Sign Up</button>
+						</div>
+					</div>
+				</div>
 
 				<div class="background">
 					<img class="logo" src="resources/img/gateway-logo.svg">

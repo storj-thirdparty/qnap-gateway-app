@@ -82,37 +82,18 @@
 
 
 .step-1 .signup {
-	position: absolute;
-	left: 252px;
-	top: 180px;
-
-	width: 936px;
-	height: 72px;
-
+	width: 100%;
 	background: rgba(38, 131, 255, 0.14);
 	border-radius: 6px;
+  padding: 20px;
 }
 
 .step-1 .signup-text {
-	position: absolute;
-	width: 703px;
-	height: 22px;
-	left: 282px;
-	top: 204px;
-
-
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 135%;
-	/* identical to box height, or 22px */
-
-	display: flex;
-	align-items: center;
-	text-align: center;
-
+	font-size: 14px;
 	color: #000000;
-
 	opacity: 0.75;
+  margin-top: 0.75em;
+  display: inline-block;
 }
 
 button:disabled {
@@ -120,29 +101,16 @@ button:disabled {
 }
 
 .step-1 .signup-button {
-	position: absolute;
-	left: 1024px;
-	right: 265px;
-	top: 192px;
-	bottom: 660px;
-
-	/* acnt-1 */
-
 	background: #2683FF;
 	border-radius: 6px;
 	border: 0;
-
 	width: 151px;
 	height: 48px;
-
-
 	font-weight: bold;
 	font-size: 16px;
-	line-height: 135%;
-
 	text-align: center;
-
 	color: #FFFFFF;
+  display: inline-block;
 }
 
 .step-1 .background {
