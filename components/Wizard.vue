@@ -22,7 +22,7 @@
 			</div>
 
 			<div class="step-1" v-if="step === 1">
-				
+
 				<div class="signup">
 					<div class="row">
 						<div class="col-sm-12 col-md-9">
@@ -35,30 +35,35 @@
 				</div>
 
 				<div class="background">
-					<img class="logo" src="resources/img/gateway-logo.svg">
+					<div class="row">
 
-					<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
-					<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
+						<div class="col-sm-12 col-md-6">
+							<img class="logo" src="resources/img/gateway-logo.svg">
+							<h1 class="title">Tardigrade S3 Gateway for QNAP</h1>
+							<p class="explaination">Use Tardigrade as your storage space on HBS 3 to back up your QNAP.<br><br>To get started, enter your bucket details from Tardigrade. To learn more about buckets on Tardigrade, check out the the guide in our documentation.</p>
+							<a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" class="docs" target="blank">S3 Gateway Docs</a>
+						</div>
 
-					<a href="https://documentation.tardigrade.io/how-tos/backup-on-qnap" class="docs" target="blank">S3 Gateway Docs</a>
+						<div class="col-sm-12 col-md-6">
+							<h2 class="bucket-details mb-4">Bucket Details</h2>
 
-					<h2 class="bucket-details">Bucket Details</h2>
+							<label class="satellite-label">Satellite</label>
+							<select class="satellite custom-select custom-select-lg mb-3" v-model="satellite">
+								<option default value="us-central-1.tardigrade.io">us-central-1.tardigrade.io</option>
+								<option value="europe-west-1.tardigrade.io">europe-west-1.tardigrade.io</option>
+								<option value="asia-east-1.tardigrade.io">asia-east-1.tardigrade.io</option>
+							</select>
 
-					<label class="satellite-label">Satellite</label>
+							<label class="api-key-label">API Key</label>
+							<input type="text" class="api-key form-control mb-3" placeholder="Enter pre-generated API key" v-model="apiKey">
 
-					<select class="satellite form-select" v-model="satellite">
-						<option default value="us-central-1.tardigrade.io">us-central-1.tardigrade.io</option>
-						<option value="europe-west-1.tardigrade.io">europe-west-1.tardigrade.io</option>
-						<option value="asia-east-1.tardigrade.io">asia-east-1.tardigrade.io</option>
-					</select>
+							<label class="passphrase-label">Encryption Passphrase</label>
+							<input type="text" class="passphrase form-control mb-3" placeholder="Passphrase" v-model="passphrase">
 
-					<label class="api-key-label">API Key</label>
-					<input type="text" class="api-key" placeholder="Enter pre-generated API key" v-model="apiKey">
+							<button class="btn btn-block continue" id="btn" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue<i class="fa fa-spinner fa-spin dnone" id="loader"></i></button>
+						</div>
 
-					<label class="passphrase-label">Encryption Passphrase</label>
-					<input type="text" class="passphrase" placeholder="Passphrase" v-model="passphrase">
-
-					<button class="continue" id="btn" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue<i class="fa fa-spinner fa-spin dnone" id="loader"></i></button>
+					</div>
 				</div>
 
 				<!--<div class="toast-wrapper">

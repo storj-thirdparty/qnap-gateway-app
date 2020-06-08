@@ -114,183 +114,75 @@ button:disabled {
 }
 
 .step-1 .background {
-	position: absolute;
-	left: 252px;
-	top: 270px;
-
 	background: #FEFEFF;
-
-	width: 936px;
-	height: 565px;
-
-	z-index: -100;
-
   border-radius: 6px;
+  padding: 80px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .step-1 .logo {
-	position: absolute;
-	top: 80px;
-	left: 94px;
-
 	height: 100px;
+  margin-bottom: 40px;
 }
 
 .step-1 .title {
-	position: absolute;
-	width: 288px;
-	height: 68px;
-	left: 96px;
-	top: 214px;
-
-
 	font-weight: bold;
 	font-size: 24px;
-	line-height: 140%;
-	/* or 34px */
-
-	display: flex;
-	align-items: center;
-
 	color: #0D1826;
 }
 
 .step-1 .explaination {
-	position: absolute;
-	width: 288px;
-	height: 130px;
-	left: 96px;
-	top: 302px;
-
-
 	font-weight: normal;
 	font-size: 14px;
-	line-height: 145%;
-	/* or 20px */
-
-
 	color: #384B65;
 }
 
 .step-1 .docs {
-	position: absolute;
-	width: 271px;
-	height: 45px;
-	left: 94px;
-	top: 455px;
-
-
 	font-weight: bold;
 	font-size: 14px;
-	line-height: 145%;
-	/* or 20px */
-
-	display: flex;
-	align-items: center;
-
 	color: #2683FF;
 }
 
 .step-1 .bucket-details {
-	position: absolute;
-	width: 298px;
-	height: 22px;
-	left: 480px;
-	top: 80px;
-
-
 	font-weight: bold;
 	font-size: 22px;
-	line-height: 100%;
-	/* identical to box height, or 22px */
-
-	display: flex;
-	align-items: center;
-
 	color: #0D1826;
 }
 
 .step-1 .satellite-label {
-	position: absolute;
-	width: 61px;
-	height: 16px;
-	left: 480px;
-	top: 130px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
 	color: #384B65;
 }
 
 .step-1 .satellite {
-	position: absolute;
-	left: 480px;
-	top: 154px;
-
-	width: 360px;
-	height: 52px;
-
 	text-indent: 14px;
-
 	background: #FFFFFF;
 	border: 1px solid #E2E6E9;
 	box-sizing: border-box;
 	overflow: hidden;
-
 	border-radius: 10px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-
 	color: #384B65;
-
 }
 
 .step-1 .api-key-label {
-	position: absolute;
-	width: 58px;
-	height: 16px;
-	left: 480px;
-	top: 230px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	align-items: center;
-
 	color: #384B65;
 }
 
 .step-1 .api-key {
-	position: absolute;
-	left: 480px;
-	top: 253px;
-
-	width: 360px;
 	height: 52px;
-
 	background: #FFFFFF;
 	border: 1px solid #E2E6E9;
 	box-sizing: border-box;
 	border-radius: 10px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-
 	text-indent: 20px;
-
 	color: #384B65;
 }
 
@@ -311,75 +203,40 @@ button:disabled {
 .step-1 ::-ms-input-placeholder { /* Microsoft Edge */
    color: rgba(56, 75, 101, 0.4);
 }
-
 .step-1 ::placeholder { /* Most modern browsers support this now. */
    color: rgba(56, 75, 101, 0.4);
 }
 
 .step-1 .passphrase-label {
-	position: absolute;
-	width: 174px;
-	height: 16px;
-	left: 481px;
-	top: 342px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-	line-height: 100%;
-	/* identical to box height, or 16px */
-
-	display: flex;
-	align-items: center;
-
 	color: #384B65;
 }
 
 .step-1 .passphrase {
-	position: absolute;
-	left: 481px;
-	top: 366px;
-
-	width: 360px;
 	height: 52px;
-
 	background: #FFFFFF;
 	border: 1px solid #E2E6E9;
 	box-sizing: border-box;
 	border-radius: 10px;
-
-
 	font-weight: normal;
 	font-size: 16px;
-	line-height: 134.09%;
-
 	text-indent: 20px;
-
 	color: #384B65;
 }
 
 .step-1 .continue {
-	position: absolute;
-	left: 480px;
-	top: 447px;
-
-	width: 360px;
-	height: 52px;
-
 	background: #2683FF;
-	border: 2px solid #2683FF;
+	border: 0;
 	box-sizing: border-box;
 	border-radius: 6px;
 	cursor: pointer;
-
-
 	font-weight: bold;
 	font-size: 16px;
-	line-height: 135%;
-
 	text-align: center;
-
 	color: #FFFFFF;
+  padding: 14px;
+  margin-top: 24px;
 }
 
 .step-2 .background {
