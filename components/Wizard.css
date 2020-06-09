@@ -96,6 +96,10 @@
 
 button:disabled {
 	opacity: 0.5 !important;
+  cursor: default !important;
+}
+button:disabled:hover {
+  background: #2683FF;
 }
 
 .step-1 .signup-button {
