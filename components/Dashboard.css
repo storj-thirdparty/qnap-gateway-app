@@ -34,6 +34,9 @@
 
 .icon-restarting {
 	animation: rotation 2s infinite linear;
+	position: relative;
+	left: -2px;
+	top: -1px;
 }
 @keyframes rotation {
   from {
