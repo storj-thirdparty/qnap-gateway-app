@@ -29,7 +29,7 @@
 							<p class="signup-text">Before setting up Tardigrade S3 Gateway for QNAP, you&apos;ll need and account on Tardigrade.io</p>
 						</div>
 						<div class="col-sm-12 col-md-3 text-md-right">
-							<button class="signup-button" href="https://tardigrade.io/satellites/" target="blank">Sign Up</button>
+							<button class="btn signup-button" href="https://tardigrade.io/satellites/" target="blank">Sign Up</button>
 						</div>
 					</div>
 				</div>
