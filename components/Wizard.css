@@ -403,6 +403,7 @@ button:disabled {
 	text-align: center;
 	color: #2683FF;
   display: inline-block;
+  cursor: pointer;
 }
 
 .toast-wrapper {
@@ -488,7 +489,6 @@ button:disabled {
   }
 }
 
-
 .dnone{
 	display: none;
 }
@@ -496,4 +496,9 @@ button:disabled {
 .button-opacity{
 	opacity: 0.6;
 	cursor: not-allowed;
+}
+
+.btn:hover {
+  background-color: #0062cc;
+  border-color: #0062cc;
 }
