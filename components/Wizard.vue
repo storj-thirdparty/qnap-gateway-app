@@ -157,23 +157,36 @@
 
 			<div class="step step-3" v-if="step === 3">
 				<div class="background">
-					<div class="back">
-						<img src="resources/img/back.png" class="icon">
-						<router-link to="/">Back to Keys</router-link>
+
+					<div class="row">
+						<div class="col">
+							<div class="back">
+								<img src="resources/img/back.png" class="icon">
+								<router-link to="/">Back to Keys</router-link>
+							</div>
+						</div>
 					</div>
 
-					<h1 class="title">Configure HBS 3</h1>
+					<div class="row justify-content-center text-center">
+						<div class="col-sm-8">
 
-					<img src="resources/img/hbs3.png" class="hbs3">
+							<h1 class="title">Configure HBS 3</h1>
+							<img src="resources/img/hbs3.png" class="hbs3">
+							<p class="explanation mb-4">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
 
-					<p class="explaination">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
+							<div class="row justify-content-center">
+								<div class="col-md-4">
+									<button class="guide btn btn-block mb-4 mt-2">Configuration Guide</button>
+								</div>
+							</div>
 
-					<button class="guide">Configuration Guide</button>
+							<a class="done mb-4" @click="save">Done</a>
 
-					<a class="done" @click="save">Done</a>
+						</div>
+					</div>
 				</div>
-
 			</div>
+
 		</div>
 
 	</div>

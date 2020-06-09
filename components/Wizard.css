@@ -358,88 +358,42 @@ button:disabled {
 }
 
 .step-3 .background {
-	position: absolute;
-	left: 252px;
-	right: 252px;
-	top: 180px;
-
-	width: 936px;
-	height: 625px;
-
 	background: #FEFEFF;
 	border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .step-3 .title {
-	position: absolute;
-	top: 84px;
-	left: 371px;
-
-	width: 195px;
-	height: 24px;
-
-
 	font-weight: bold;
 	font-size: 24px;
-	line-height: 100%;
-	/* identical to box height, or 24px */
-
-	display: flex;
-	align-items: center;
 	text-align: center;
-
 	color: #0D1826;
 }
 
 .step-3 .hbs3 {
-	position: absolute;
-	top: 135.6px;
-	left: 298.46px;
-
-	width: 340.36px;
-
+	width: 340px;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  margin: 40px auto;
 }
 
 .step-3 .explaination {
-	position: absolute;
-	width: 707px;
-	height: 78px;
-	left: 114px;
-	top: 356px;
-
-
 	font-weight: normal;
 	font-size: 18px;
-	line-height: 145%;
-	/* or 26px */
-
 	text-align: center;
-
 	color: #384B65;
 }
 
 .step-3 .guide {
-	position: absolute;
-	left: 366px;
-	top: 485px;
-
-	width: 205px;
 	height: 48px;
-
 	background: #2683FF;
 	border: 2px solid #2683FF;
 	box-sizing: border-box;
 	border-radius: 6px;
 	cursor: pointer;
-
-
 	font-weight: bold;
 	font-size: 16px;
-	line-height: 135%;
-
 	text-align: center;
-
 	color: #FFFFFF;
 }
 
@@ -450,16 +404,14 @@ button:disabled {
 	font-size: 16px;
 	text-align: center;
 	color: #2683FF;
-	position: absolute;
-  top: 555px;
-  left: 448px;
+  display: inline-block;
 }
 
 .toast-wrapper {
-	 position:
-	 absolute;
-	 top: 72px;
-	 right: 24px;
+  position:
+  absolute;
+  top: 72px;
+  right: 24px;
 }
 .toast {
 	opacity: 1;
