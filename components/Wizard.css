@@ -142,7 +142,7 @@ button:disabled {
 	font-weight: bold;
 	font-size: 14px;
 	color: #2683FF;
-  display: block;
+  display: inline-block;
 }
 
 .step-1 .bucket-details {
