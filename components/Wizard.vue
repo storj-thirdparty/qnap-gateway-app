@@ -60,7 +60,7 @@
 							<label class="passphrase-label">Encryption Passphrase</label>
 							<input type="text" class="passphrase form-control mb-3" placeholder="Passphrase" v-model="passphrase">
 
-							<button class="btn btn-block continue" id="btn" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue<i class="fa fa-spinner fa-spin dnone" id="loader"></i></button>
+							<button class="btn btn-block continue" id="btn" @click="firstStepContinue" :disabled="!(isPassphraseValid && isApiKeyValid)">Continue<i class="lds-ring dnone" id="loader"><div></div><div></div><div></div><div></div></i></button>
 						</div>
 
 					</div>
