@@ -84,24 +84,51 @@
 			</div>
 
 			<div class="step step-2" v-if="step === 2">
+
 				<div class="background">
-					<div class="back">
-						<img src="resources/img/back.png" class="icon">
-						<router-link to="/">Back to Gateway Setup</router-link>
+
+					<div class="row">
+						<div class="col">
+							<div class="back">
+								<img src="resources/img/back.png" class="icon">
+								<router-link to="/">Back to Gateway Setup</router-link>
+							</div>
+						</div>
 					</div>
 
-					<h1 class="title">Save Your Keys</h1>
-					<p class="explaination">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
+					<div class="row justify-content-center">
+						<div class="col-sm-8 col-md-7 col-lg-6">
 
-					<label class="access-key-label">Access Key</label>
-					<input type="text" class="access-key" v-model="accessKey">
-					<button class="access-key-copy" @click.stop.prevent="copyAccessKey">Copy</button>
+							<h1 class="title text-center">Save Your Keys</h1>
+							<p class="explanation text-center mb-4">Copy and paste your Access and Secret Keys in a safe place. You will need both later for configuring HSB 3 to backup your QNAP.</p>
 
-					<label class="secret-key-label">Secret Key</label>
-					<input type="text" class="secret-key" v-model="secretKey">
-					<button class="secret-key-copy" @click.stop.prevent="copySecretKey">Copy</button>
+							<label class="access-key-label">Access Key</label>
 
-					<button class="continue" @click="step++">Continue</button>
+							<div class="input-group mb-4">
+				        <input type="text" class="access-key form-control" v-model="accessKey">
+								<div class="input-group-prepend">
+				          <button class="access-key-copy" @click.stop.prevent="copyAccessKey">Copy</button>
+				        </div>
+				      </div>
+
+							<label class="secret-key-label">Secret Key</label>
+
+							<div class="input-group mb-4">
+				        <input type="text" class="secret-key form-control" v-model="secretKey">
+								<div class="input-group-prepend">
+				          <button class="secret-key-copy" @click.stop.prevent="copySecretKey">Copy</button>
+				        </div>
+				      </div>
+
+							<div class="row justify-content-center">
+								<div class="col-md-6">
+									<button class="continue btn btn-block mb-5" @click="step++">Continue</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
 				</div>
 
 				<!--<div class="toast-wrapper">
