@@ -175,7 +175,7 @@
 							<p class="explanation mb-4">Next, you&apos;ll configure HBS 3 for backing up your QNAP to Tardigrade. After going through the docs, return here to manage your connection status, reconfigure Tardigrade Gateway, and see your Access and Secret keys.</p>
 
 							<div class="row justify-content-center">
-								<div class="col-md-4">
+								<div class="col-md-5">
 									<button class="guide btn btn-block mb-4 mt-2">Configuration Guide</button>
 								</div>
 							</div>
