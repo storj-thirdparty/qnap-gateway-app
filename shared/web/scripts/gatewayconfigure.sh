@@ -10,7 +10,7 @@ docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint 
 
 echo `date` " Saving Configuration of  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG
-cmd="docker run --rm --name ${CONTAINER_NAME} -p ${1} -v ${5}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest setup --satellite-address ${2} --api-key ${3} --passphrase ${4} --non-interactive"
+cmd="docker run --rm --name ${CONTAINER_NAME} -p ${1} -v ${5}/gateway:/root/.local/share/storj/gateway storjlabs/gateway:latest setup --satellite-address ${2} --api-key ${3} --passphrase '${4}' --non-interactive"
 
 echo "RUNNING ----------- $cmd ------------- " >> $LOG
 output=`$cmd 2>&1  `

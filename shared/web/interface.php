@@ -60,7 +60,7 @@
 				    $apiKey = $data['apiKey'];
 					$passphrase = $data['passphrase'];
 					$port = "127.0.0.1:7777:7777";
-
+                    stopGateway();
 				    configureGateway($port,$satellite,$apiKey,$passphrase);
 
 				}
@@ -149,18 +149,18 @@
 	}
 
 		// Restart Gateway
-		function restartGateway() {
-			global $stopScript;
-			global $startScript;
-			global $file;
-			// Excute shell script for stoping gateway process
-			logMessage("Interface called to restart Gateway ");
+	function restartGateway() {
+		global $stopScript;
+		global $startScript;
+		global $file;
+		// Excute shell script for stoping gateway process
+		logMessage("Interface called to restart Gateway ");
 
-			logEnvironment() ;
-			stopGateway() ;
-			runGateway() ;
+		logEnvironment() ;
+		stopGateway() ;
+		runGateway() ;
 	
-			return status();
+		return status();
 		}
 
 	// Configure Geteway
@@ -179,7 +179,7 @@
 		file_put_contents($file, $newJsonString);
 		
 		logMessage("Interface called to save parameters and configure Gateway ");
-		$output = shell_exec("/bin/bash $configureScript $port $satellite $apiKey $passphrase $moduleBase 2>&1 ");
+		$output = shell_exec("/bin/bash $configureScript $port $satellite $apiKey '$passphrase' $moduleBase 2>&1 ");
 
 
 
