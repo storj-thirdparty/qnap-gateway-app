@@ -11,14 +11,6 @@ setupEnv
 
 LOG=$LOGFILE
 
-if [[ $# -lt 1 ]]
-then
-    msg="Not enough parameters to run gateway"
-    echo $msg
-    echo $msg >> $LOG
-    exit 1
-fi
-
 echo $(date) $PKGNAME  " docker container updater script running " >> $LOG
 
 export PATH=$PATH:${SYS_QPKG_INSTALL_PATH}/container-station/bin

@@ -15,6 +15,7 @@
 	$stopScript     = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewaystop.sh' ;
 	$updateScript = $scriptsBase . DIRECTORY_SEPARATOR . 'gatewayupdate.sh' ;
 	$isRunning      = $scriptsBase . DIRECTORY_SEPARATOR . 'isRunning.sh' ;
+	$parameters      = $scriptsBase . DIRECTORY_SEPARATOR . 'parameters.sh' ;
 	$dockerConfigFile = 'gateway/config.yaml';
 	logMessage("------------------------------------------------------------------------------");
 	logMessage("Platform Base($platformBase), ModuleBase($moduleBase) scriptBase($scriptsBase)");
@@ -167,7 +168,7 @@
 	function configureGateway($port,$satellite,$apiKey,$passphrase){
 		global $file;
 		global $output;
-		global $configureScript, $moduleBase;
+		global $configureScript, $moduleBase, $parameters;
 		$jsonString = file_get_contents($file);
 	    $data = json_decode($jsonString, true);
 
@@ -191,9 +192,7 @@
 	    $secretkey = "";
 
 	    header('Content-Type: text/plain');
-
-	    //$contents = shell_exec('export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin ; docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:latest /root/.local/share/storj/gateway/config.yaml 2>&1 ');
-
+        $contents = shell_exec("/bin/bash $parameters 2>&1 ");
 
 	    $pattern = preg_quote($searchaccesskey, '/');
 	    $pattern = "/^\s*${pattern}\s*:.*\$/m";
