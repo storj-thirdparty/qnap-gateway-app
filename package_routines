@@ -115,7 +115,7 @@ PKG_PRE_REMOVE="{
 # -----------------------------------------------------------
 # Cleanup docker containers and images
 # -----------------------------------------------------------
-export PATH=\$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
+export PATH=\$PATH:$SYS_QPKG_INSTALL_PATH/container-station/bin
 BASE_IMAGE=storjlabs/gateway:latest
 CONTAINER_NAME=storjlabsgatewayrun
 LOGFILE=$LOGFILE
@@ -128,7 +128,7 @@ docker rm -f \$CONTAINER_NAME	>> \$LOGFILE
 # -----------------------------------------------------------
 # Cleanup cron entries
 # -----------------------------------------------------------
-BASE_PATH=/share/Web/GATEWAY
+BASE_PATH=\$SYS_WEB_PATH/\$PKGNAME
 CONFIG_FILE=\$BASE_PATH/config.json
 GTCRON=\`mktemp\`
 NEWCRON=\`mktemp\`
@@ -218,21 +218,50 @@ echo `date ` "INSTALL run completed (ver $QPKG_VER) " >> $LOGFILE
 #
 pkg_post_install(){
 echo `date ` " RUNNING post install " >> $LOGFILE
-#$cd /share/Public/
-#Changing the file permissions for retentive parameters
-$CMD_CHMOD 666 /share/CACHEDEV1_DATA/.qpkg/GATEWAY/web/config.json
-$CMD_CHOWN httpdusr /share/CACHEDEV1_DATA/.qpkg/GATEWAY
-$CMD_CHMOD 777 /share/CACHEDEV1_DATA/.qpkg/GATEWAY/web/conf
-$CMD_CHOWN admin /share/CACHEDEV1_DATA/.qpkg/GATEWAY/web/scripts/*.sh
-$CMD_CHMOD a+rx /share/CACHEDEV1_DATA/.qpkg/GATEWAY/web/scripts/*.sh
-$CMD_CHMOD u+s /share/CACHEDEV1_DATA/.qpkg/GATEWAY/web/scripts/*.sh
 
-#------------------Addtional Post Indtall Actions----------------------------------------------
+# ------------------- Capture All System defined resource paths --------------------------- 
+COMMONFILE=$SYS_QPKG_DIR/web/scripts/common.sh
+RESOURCEFILE=$SYS_QPKG_DIR/web/scripts/resource.sh
+echo "#==============================================" >> $RESOURCEFILE
+echo "export PATH=\$PATH:$SYS_QPKG_INSTALL_PATH/container-station/bin" >> $RESOURCEFILE
+echo "export PATH=\$PATH:$SYS_QPKG_DIR/web/scripts" >> $RESOURCEFILE
+echo "# ---------- System Environment Variables ------------" >> $RESOURCEFILE
+echo "SYS_QPKG_BASE=$SYS_QPKG_BASE" >> $RESOURCEFILE
+echo "SYS_QPKG_INSTALL_PATH=$SYS_QPKG_INSTALL_PATH" >> $RESOURCEFILE
+echo "SYS_QPKG_DIR=$SYS_QPKG_DIR" >> $RESOURCEFILE
+echo "SYS_PUBLIC_SHARE=$SYS_PUBLIC_SHARE" >> $RESOURCEFILE
+echo "SYS_PUBLIC_PATH=$SYS_PUBLIC_PATH" >> $RESOURCEFILE
+echo "SYS_DOWNLOAD_SHARE=$SYS_DOWNLOAD_SHARE" >> $RESOURCEFILE
+echo "SYS_DOWNLOAD_PATH=$SYS_DOWNLOAD_PATH" >> $RESOURCEFILE
+echo "SYS_WEB_SHARE=$SYS_WEB_SHARE" >> $RESOURCEFILE
+echo "SYS_WEB_PATH=$SYS_WEB_PATH" >> $RESOURCEFILE
+echo "SYS_EXTRACT_DIR=$SYS_EXTRACT_DIR" >> $RESOURCEFILE
+echo "SYS_QPKG_DATA_PACKAGES_FILE=$SYS_QPKG_DATA_PACKAGES_FILE" >> $RESOURCEFILE
+echo "SYS_HOSTNAME=$SYS_HOSTNAME" >> $RESOURCEFILE
+# ------------ Capture STORJ specific STANDARDIZED variables ------------
+echo "# ---------- STORJ Environment Variables ------------" >> $RESOURCEFILE
+echo "PKG_INSTALL_PATH=$SYS_QPKG_INSTALL_PATH" >> $RESOURCEFILE
+echo "PKG_DIR=$SYS_QPKG_DIR" >> $RESOURCEFILE
+echo "PUBLIC_PATH=$SYS_PUBLIC_PATH" >> $RESOURCEFILE
+echo "DOWNLOAD_PATH=$SYS_DOWNLOAD_PATH" >> $RESOURCEFILE
+echo "WEB_PATH=$SYS_WEB_PATH" >> $RESOURCEFILE
+echo "EXTRACT_DIR=$SYS_EXTRACT_DIR" >> $RESOURCEFILE
+echo "INSTALL_HOSTNAME=$SYS_HOSTNAME" >> $RESOURCEFILE
+echo "#==============================================" >> $RESOURCEFILE
+
+#Changing the file permissions for retentive parameters
+$CMD_CHMOD 666 $SYS_QPKG_DIR/web/config.json
+$CMD_CHOWN -R httpdusr $SYS_QPKG_DIR
+$CMD_CHOWN admin $SYS_QPKG_DIR/web/scripts/*.sh
+$CMD_CHMOD a+rx $SYS_QPKG_DIR/web/scripts/*.sh
+$CMD_CHMOD u+s $SYS_QPKG_DIR/web/scripts/*.sh
+
+#------------------Addtional Post Install Actions----------------------------------------------
 
 
 
 # ------- cron setup ------------------------------
-BASE_PATH="/share/Web/GATEWAY"
+BASE_PATH="$SYS_WEB_PATH/GATEWAY"
 CONFIG_FILE="${BASE_PATH}/config.json"
 GTCRON="/tmp/gtcrontable"
 

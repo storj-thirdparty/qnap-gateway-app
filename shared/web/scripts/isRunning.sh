@@ -1,7 +1,13 @@
 #!/bin/bash
 # This script checks the running of gateway container
-PKGNAME="GATEWAY"
-LOG="/var/log/$PKGNAME"
+function setupEnv() {
+    dirpath=$(dirname $0)
+    export PATH=$PATH:$dirpath
+    . common.sh
+}
+setupEnv 
+
+LOG=$LOGFILE
 CONTAINER_NAME=storjlabsgatewayrun
 if [[ $# -gt 0 ]]
 then
@@ -9,7 +15,7 @@ then
 fi
 echo `date` "checking run status ${CONTAINER_NAME}" >> $LOG
 
-export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin
+export PATH=$PATH:${SYS_QPKG_INSTALL_PATH}/container-station/bin
 status=`docker inspect -f '{{.State.Running}}' ${CONTAINER_NAME} 2>/dev/null `
 echo "Run Status($CONTAINER_NAME) : #${status}# " >> $LOG 
 
