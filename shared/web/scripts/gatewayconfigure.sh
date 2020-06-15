@@ -21,7 +21,8 @@ echo $(date) "Gateway is getting configured" >> $LOG
 
 export PATH=$PATH:${SYS_QPKG_INSTALL_PATH}/container-station/bin
 CONTAINER_NAME=storjlabsgatewayconfig
-docker run --rm -v $(pwd)/gateway:/root/.local/share/storj/gateway --entrypoint /bin/rm storjlabs/gateway:latest -f /root/.local/share/storj/gateway/config.yaml
+cmd="docker run --rm -v ${5}/gateway:/root/.local/share/storj/gateway --entrypoint /bin/rm storjlabs/gateway:latest -f /root/.local/share/storj/gateway/config.yaml"
+echo "RUNNING ----------- $cmd ------------- " >> $LOG
 
 echo $(date) " Saving Configuration of  ${CONTAINER_NAME} ---> " >> $LOG
 docker ps -a  >> $LOG

@@ -22,6 +22,7 @@ fi
 echo $(date) $PKGNAME  " docker container updater script running " >> $LOG
 
 export PATH=$PATH:${SYS_QPKG_INSTALL_PATH}/container-station/bin
+moduleBase=${WEB_PATH}/${PKGNAME}
 
 
 # ------------------------------------------------------------------------------
