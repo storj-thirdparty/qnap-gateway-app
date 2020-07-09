@@ -4,8 +4,8 @@
 	# ------------------------------------------------------------------------
 	$filename = "config.json";
 
-	$platformBase   = $_SERVER['DOCUMENT_ROOT'];
-	$moduleBase     = $platformBase . dirname($_SERVER['PHP_SELF']) ;
+	$platformBase   = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
+	$moduleBase     = $platformBase . dirname(filter_input(INPUT_SERVER, 'PHP_SELF')) ;
 	$scriptsBase    = $moduleBase . '/scripts' ;
 
 
@@ -126,10 +126,8 @@
 	 // Run Gateway
 	function runGateway(){
 		global $startScript;
-		global $file, $moduleBase;
+		global $moduleBase;
 		logMessage("Interface called to run Gateway ");
-	    logEnvironment() ;
-	   
 	    $output = shell_exec("/bin/bash $startScript $moduleBase 2>&1 ");
 
 		return status();
@@ -138,14 +136,9 @@
 	// Stop Gateway
 	function stopGateway() {
 		global $stopScript;
-		global $file;
 		// Excute shell script for stoping gateway process
 		logMessage("Interface called to stop Gateway ");
-		logEnvironment() ;
-
 		$output = shell_exec("/bin/bash $stopScript 2>&1 ");
-
-
 		return status();
 	}
 
@@ -153,14 +146,10 @@
 	function restartGateway() {
 		global $stopScript;
 		global $startScript;
-		global $file;
 		// Excute shell script for stoping gateway process
 		logMessage("Interface called to restart Gateway ");
-
-		logEnvironment() ;
 		stopGateway() ;
 		runGateway() ;
-	
 		return status();
 		}
 
@@ -178,7 +167,7 @@
 
 	    $newJsonString = json_encode($data);
 		file_put_contents($file, $newJsonString);
-		
+		logEnvironment();
 		logMessage("Interface called to save parameters and configure Gateway ");
 		$output = shell_exec("/bin/bash $configureScript $port $satellite $apiKey '$passphrase' $moduleBase 2>&1 ");
 
