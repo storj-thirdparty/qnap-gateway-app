@@ -1,5 +1,7 @@
 # TARDIGRADE GATEWAY QNAP
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d1a6a204b244643a47d7047a16bf05d)](https://app.codacy.com/gh/storj-thirdparty/qnap-gateway-app?utm_source=github.com&utm_medium=referral&utm_content=storj-thirdparty/qnap-gateway-app&utm_campaign=Badge_Grade_Dashboard)
+
 STORJ QNAP is the application for installing on QNAP NAS applications page. The format of the application installed on the QNAP is .qpkg which can be built on [QDK](https://github.com/qnap-dev/QDK#installation).
 
 ## Building Instructions
