@@ -8,7 +8,7 @@ function setupEnv() {
 setupEnv 
 
 LOG=$LOGFILE
-echo $(date) "Gateway parameter extraction" >> $LOG
+echo "$(date)" "Gateway parameter extraction" >> "$LOG"
 export PATH=$PATH:${SYS_QPKG_INSTALL_PATH}/container-station/bin
 moduleBase=${WEB_PATH}/${PKGNAME}
 docker run --rm -v ${moduleBase}/gateway:/root/.local/share/storj/gateway --entrypoint /bin/cat storjlabs/gateway:latest /root/.local/share/storj/gateway/config.yaml
