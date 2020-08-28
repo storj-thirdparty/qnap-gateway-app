@@ -26,12 +26,10 @@ https://github.com/storj-thirdparty/qnap-gateway-app/releases
 
    Click 'Done'.  If you are configuring for HBS3 you can view the configuration guide specific to HBS3 by clicking the link in the app.
 
-   
 2. ![setup-4](Tardigrade-QNAP_Gateway_Install.assets/setup-4.png)
 
    Gateway will be in a "Stopped" state by default.  Select the drop-down and start the gateway.
 
-   
 3. ![setup-5](Tardigrade-QNAP_Gateway_Install.assets/setup-5.png)
 
    Once the gateway is started the status will be updated.

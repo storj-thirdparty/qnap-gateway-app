@@ -1,8 +1,10 @@
-# TARDIGRADE GATEWAY QNAP
+# QNAP Tardigrade Gateway
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d1a6a204b244643a47d7047a16bf05d)](https://app.codacy.com/gh/storj-thirdparty/qnap-gateway-app?utm_source=github.com&utm_medium=referral&utm_content=storj-thirdparty/qnap-gateway-app&utm_campaign=Badge_Grade_Dashboard)
 
-STORJ QNAP is the application for installing on QNAP NAS applications page. The format of the application installed on the QNAP is .qpkg which can be built on [QDK](https://github.com/qnap-dev/QDK#installation).
+
+
+The QNAP Tardigrade Gateway is an application for installing the Tardigrade S3-compatible gateway on a QNAP device. The format of the application installed on the QNAP is .qpkg which is built on the [QDK](https://github.com/qnap-dev/QDK#installation).
 
 ## Building Instructions
 
@@ -18,7 +20,7 @@ Cloning the repository.
 
 ```bash
 $ git clone https://github.com/storj/qnap-gateway-app
-$ cd storj-node-qnap
+$ cd qnap-gateway-qnap
 ```
 
 Build the front end (requires node js)
@@ -35,49 +37,41 @@ The qpkg file is found at [storj-node-qnap/build](storj-node-qnap/build)
 
 [QPKG Building Instructions](https://edhongcy.gitbooks.io/qdk-quick-start-guide/content/build-your-own-qpkg.html)
 
+
+
 ## Cheat sheet
 - To create a new Project `qbuild --create-env <project-name>`
+
 - Change version number(QPKG_VER) in [qpkg.cfg](qpkg.cfg)
-- [To add new icons](https://github.com/qnap-dev/QDK#how-to-add-icons-in-qpkg)
-- Add html/php files in [web folder](shared/web)
 
-## Identity Generation
-[Storj docs](https://documentation.storj.io/dependencies/identity)
-
-
+  
 
 ## Paths
+
 docker-path - '/share/CACHEDEV1_DATA/.qpkg/container-station/bin/docker'
 
 Actions to the triggers can be found and added in storj-node-qnap/shared/STORJ.sh.
 Perform actions accordingly. Give the full path of the executables.
 Default actions can be found in the package_routines.
-Actions can be fired from system("/etc/init.d/STORJ.sh <your-command>") in php script.
+Actions can be fired from system("/etc/init.d/GATEWAY.sh <your-command>") in php script.
 
 Actions that should be executed pre and post the installation of the app is written in package_routines.
 
-storj-node-qnap/shared/file_exists.sh will give you if the identity files are generated or not.
 
-The entry point of the app is index.php. Based on the output of file_exists.sh, the page is redirected to either authorization.php or dashboard.php.
-
-dashboard.php will check if the docker is running or not which is queried from STORJ.sh. If the docker is running it will give stop button and show you the dashboard, else it will show a form for wallet, email, port, storage and bandwidth and let you start the container.
-start and stop commands are fired to STORJ.sh
-
-Pass absolute path of the Storage Directory in the form field Identity path.
 
 # App Use
-- Put path to identity folder in **Identity**. This is the absolute path of `identity` folder. For example you copied your identity folder to `/share/Public`, the input will be `/share/Public/identity`.
-- Make sure you open the port you're going to enter in **Port Forwarding**.
-- **Storage Directory** should contain the complete path to the shared folder. Make sure you give all the permissions to the folder with `chmod -R 777 </absolutepath/to/shared_folder>`. For example you create a folder with name `storj` at `/root`, this field should be populated with `/root/storj`
-- **Ethereum Wallet Address** It should be a valid ERC-20 compatible wallet address. If this path is invalid the storagenode woould not start.
-- **Email** Please check the email id
-- **Bandwidth** The minimum bandwidth requirement is **2TB**.
-- **Storage Allocation** Be sure not to over-allocate space! Allow at least 10% extra for overhead. If you over-allocate space, you may corrupt your database when the system attempts to store pieces when no more physical space is actually available on your drive. The minimum storage shared requirement is 500 GB, which means you need a disk of at least 550 GB total size to allow for the 10% overhead.
+**API Key** and **Passphrase** ... Enter your Tardigrade API information and encryption passphrase that you want to use with the Storj-powered Tardigrade network.
+
+**Access Key** and **Secret** ... These items are used by the S3-compatible application you want to interface with the Tardigrade network.
+
+**Start** / **Stop **Gateway - Manually start and stop the gateway.
 
 # Debug
-App is installed at `/share/CACHEDEV1_DATA/.qpkg/STORJ`. The folder structure is the same as it is in the shared folder. In case the app is misbehaving or needs to be debugged, it can be found here.
+
+App is installed at `/share/CACHEDEV1_DATA/.qpkg/GATEWAY. The folder structure is the same as it is in the shared folder. In case the app is misbehaving or needs to be debugged, it can be found here.
 
 If you can't see or access the dashboard try the command **docker container ls -all** to check if the storaganode docker container is running.
 
 ## More information
-To know more about running the Docker container of Storj Storage node docker container [Storagenode CLI](https://documentation.storj.io/setup/cli/storage-node)
+To know more about running the Docker container of Tardigrade Uplink Gateway please see the [Uplink Gateway documentation](https://documentation.tardigrade.io/api-reference/s3-gateway)
+
