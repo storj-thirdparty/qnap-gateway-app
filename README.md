@@ -6,6 +6,20 @@
 
 The QNAP Tardigrade Gateway is an application for installing the Tardigrade S3-compatible gateway on a QNAP device. The format of the application installed on the QNAP is .qpkg which is built on the [QDK](https://github.com/qnap-dev/QDK#installation).
 
+<br />
+
+# App Use
+
+**API Key** and **Passphrase** ... Enter your Tardigrade API information and encryption passphrase that you want to use with the Storj-powered Tardigrade network.
+
+**Access Key** and **Secret** ... These items are used by the S3-compatible application you want to interface with the Tardigrade network.
+
+**Start** / **Stop **Gateway - Manually start and stop the gateway.
+
+
+
+<br />
+
 ## Building Instructions
 
 Install [Entware](https://www.qnapclub.eu/en/qpkg/556) on QNAP.
@@ -33,13 +47,14 @@ $ npm run build
 ``` bash
 $ qbuild
 ```
-The qpkg file is found at [storj-node-qnap/build](storj-node-qnap/build)
+The qpkg file is found at qnap-gateway-app/build](storj-node-qnap/build)
 
 [QPKG Building Instructions](https://edhongcy.gitbooks.io/qdk-quick-start-guide/content/build-your-own-qpkg.html)
 
 
 
-## Cheat sheet
+### Cheat sheet
+
 - To create a new Project `qbuild --create-env <project-name>`
 
 - Change version number(QPKG_VER) in [qpkg.cfg](qpkg.cfg)
@@ -59,12 +74,7 @@ Actions that should be executed pre and post the installation of the app is writ
 
 
 
-# App Use
-**API Key** and **Passphrase** ... Enter your Tardigrade API information and encryption passphrase that you want to use with the Storj-powered Tardigrade network.
 
-**Access Key** and **Secret** ... These items are used by the S3-compatible application you want to interface with the Tardigrade network.
-
-**Start** / **Stop **Gateway - Manually start and stop the gateway.
 
 # Debug
 
