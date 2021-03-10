@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/storj/qnap-gateway-app#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "css-loader": "^3.5.3",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
